@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://ctvbsbyvjp67g"]
+
+[node name="PathIndicator" type="Line2D"]
+width = 1.0
+default_color = Color(0.305882, 0.368627, 1, 1)

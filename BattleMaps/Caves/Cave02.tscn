@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://bo8w3eu8d25k0"]
+
+[ext_resource type="PackedScene" uid="uid://c5qu4b84eidrv" path="res://BattleMaps/Caves/BaseCave.tscn" id="1_j7wvh"]
+
+[node name="Cave01" instance=ExtResource("1_j7wvh")]

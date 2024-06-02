@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cm2c1w55mxnuw"]
+
+[ext_resource type="Script" path="res://Agents&Tools/UnitFactory/UnitFactory.gd" id="1_ygti2"]
+
+[node name="UnitFactory" type="Node"]
+script = ExtResource("1_ygti2")

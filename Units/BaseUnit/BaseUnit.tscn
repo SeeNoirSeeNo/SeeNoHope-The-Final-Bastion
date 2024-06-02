@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://cgyco40xl2sqa"]
+
+[ext_resource type="Script" path="res://Units/BaseUnit/BaseUnit.gd" id="1_ktcmd"]
+[ext_resource type="Texture2D" uid="uid://sygg65bqrme2" path="res://Units/BaseUnit/icon.svg" id="1_ud5mp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t31g7"]
+size = Vector2(128, 128)
+
+[node name="BaseUnit" type="CharacterBody2D"]
+position = Vector2(-7.10543e-15, -6.77626e-21)
+scale = Vector2(0.25042, 0.25042)
+script = ExtResource("1_ktcmd")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_ud5mp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_t31g7")

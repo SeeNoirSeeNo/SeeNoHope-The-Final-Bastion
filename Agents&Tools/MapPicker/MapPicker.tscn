@@ -1,0 +1,9 @@
+[gd_scene load_steps=4 format=3 uid="uid://duelxmv41oxw4"]
+
+[ext_resource type="Script" path="res://Agents&Tools/MapPicker/MapPicker.gd" id="1_otyls"]
+[ext_resource type="PackedScene" uid="uid://j07vr76r6w01" path="res://BattleMaps/Caves/Cave01.tscn" id="2_jyl5r"]
+[ext_resource type="PackedScene" uid="uid://bo8w3eu8d25k0" path="res://BattleMaps/Caves/Cave02.tscn" id="3_851yy"]
+
+[node name="MapPicker" type="Node"]
+script = ExtResource("1_otyls")
+possible_maps = Array[PackedScene]([ExtResource("2_jyl5r"), ExtResource("3_851yy")])

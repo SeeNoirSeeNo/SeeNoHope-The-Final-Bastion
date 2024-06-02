@@ -1,0 +1,14 @@
+res://MainScenes/Battle.tscn
+res://MainScenes/Battle.gd
+res://Agents&Tools/NavigationGrid/NavigationGrid.gd
+res://BattleMaps/Caves/BaseCave.tscn
+res://BattleMaps/Caves/Cave01.tscn
+res://Agents&Tools/NavigationGrid/path_indicator.tscn
+res://Agents&Tools/NavigationGrid/UnitFactory.tscn
+res://Agents&Tools/MapPicker/MapPicker.tscn
+res://BattleMaps/Caves/Cave02.tscn
+res://Agents&Tools/MapPicker/MapPicker.gd
+res://Agents&Tools/UnitFactory/UnitFactory.gd
+res://Units/BaseUnit/BaseUnit.gd
+res://Units/FlyingEye/FlyingEye.gd
+res://Agents&Tools/UnitFactory/UnitFactory.tscn
