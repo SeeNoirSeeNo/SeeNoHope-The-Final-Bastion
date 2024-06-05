@@ -1,9 +1,8 @@
-res://Agents&Tools/NavigationGrid/NavigationGrid.gd
 res://MainScenes/Battle.tscn
+res://MainScenes/Battle.gd
 res://Agents&Tools/UnitFactory/UnitFactory.tscn
 res://Units/BaseUnit/BaseUnit.tscn
-res://Agents&Tools/UnitFactory/UnitFactory.gd
-res://MainScenes/Battle.gd
 res://Units/CaveGoblin/CaveGoblin.tscn
 res://Units/FlyingEye/FlyingEye.tscn
-res://MainScenes/Camera2D.gd
+res://BattleMaps/Caves/Cave01.tscn
+res://BattleMaps/Caves/Cave02.tscn

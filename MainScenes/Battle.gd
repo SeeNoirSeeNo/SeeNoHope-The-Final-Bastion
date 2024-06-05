@@ -19,6 +19,7 @@ func _ready():
 		random_cell = navigation_grid.get_free_cell_local()
 		unit_factory.create_unit("FlyingEye", random_cell, "Enemy", "Enemy")
 		print(navigation_grid.tile_map.local_to_map(random_cell))
+
 	
 func connect_signals():
 		map_picker.map_loaded.connect(navigation_grid._on_map_loaded)
