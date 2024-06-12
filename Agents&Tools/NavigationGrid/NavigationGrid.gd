@@ -1,5 +1,5 @@
 extends Node2D
-
+class_name NavigationGrid
 
 ### SIGNALS ###
 ### @EXPORTS ###
@@ -8,6 +8,7 @@ extends Node2D
 ### VARIABLES ###
 var astar: AStarGrid2D 
 var tile_map: TileMap
+var units: Dictionary = { }
 var free_cells: Array[Vector2i]
 var occupied_cells: Array[Vector2i]
 var free_cells_local: Array[Vector2]
@@ -16,12 +17,32 @@ var previous_mouse_grid_position : Vector2i
 ### DEBUG ###
 var draw_circles = false
 
+
+func _process(delta):
+	if draw_circles:
+		var current_mouse_grid_position = get_cell(get_global_mouse_position())
+		if current_mouse_grid_position != previous_mouse_grid_position:
+			previous_mouse_grid_position = current_mouse_grid_position
+			print(current_mouse_grid_position)
+
+func move_unit(unit: Unit, new_position):
+	if units.has(unit.current_cell):
+		units.erase(unit.current_cell)
+		make_cell_free(unit.current_cell)
+
+
+
+
+
+#PRESS-E for DEBUG Info
 func _input(event):
 	if event.is_action_pressed("debug"):
 		draw_circles = !draw_circles
 		queue_redraw()
 		print("NavigationGrid: Draw Circles = ", draw_circles)
-		
+
+
+#Draw Debug Info
 func _draw():
 	if draw_circles:
 		for cell in free_cells_local:
@@ -29,13 +50,8 @@ func _draw():
 		for cell in occupied_cells_local:
 			draw_circle(cell, 3, Color.RED)
 
-func _process(delta):
-	if draw_circles:
-		var current_mouse_grid_position = get_mouse_grid_position()
-		if current_mouse_grid_position != previous_mouse_grid_position:
-			previous_mouse_grid_position = current_mouse_grid_position
-			print(current_mouse_grid_position)
-		
+
+
 ### FUNCTIONS ###
 #STARTS WHEN MAP WAS LOADED
 func _on_map_loaded(_map_name): #Initalize A*GRID2D
@@ -44,13 +60,124 @@ func _on_map_loaded(_map_name): #Initalize A*GRID2D
 	###DEBUG###
 	print("NavigationGrid: Init of AStarfinished!")
 
-#Converts Global Mouse Position To Grid Coords
-func get_mouse_grid_position():
-	return tile_map.local_to_map(get_global_mouse_position())
+#When a unit is created, we put it in the units dict and block the cell
+func _on_unit_created(unit: Unit):
+	units[unit.current_cell] = unit #Add Unit To Units Dictionary
+	make_cell_solid(unit.current_cell) #Make Cell Solid
+
+#Converts Local (Global?) Position To Grid Coords
+func get_cell(local_position: Vector2) -> Vector2i:
+	return tile_map.local_to_map(local_position)
+
+#Returns a Dict of all adjacent cells in relation to the cell passed as an argument
+func get_adjacent_cells(cell : Vector2i):
+	var directions = {
+		"top_left" : Vector2i(-1, -1), "top" : Vector2i(0, -1), "top_right" : Vector2i(1, -1),
+		"left" : Vector2i(-1, 0),                  "right" : Vector2i(1, 0),
+		"bottom_left" : Vector2i(-1, 1), "bottom" : Vector2i(0, 1), "bottom_right" : Vector2i(1, 1)
+	}
+	var adjacent_cells = {}
+	for direction in directions:
+		adjacent_cells[direction] = cell + directions[direction]
+	
+	return adjacent_cells
+
+#Gets adjacent units if they belong to group
+func get_adjacent_units(caller: Unit, group: String):
+	var adjacent_units = []
+	for cell in caller.adjacent_cells.values():
+		if units.has(cell) && units[cell].group != group:
+			adjacent_units.append(units[cell])
+	return adjacent_units
+
+
+
+#func get_closest_unit_cell(caller: Unit, group: String):
+#	var closest_cell = null
+#	var closest_distance = INF
+#	var start = caller.current_cell
+#
+#	for cell in units.keys():
+#		if cell == caller.current_cell:  # Skip the caller itself
+#			continue
+#		if units[cell].group != group:
+#			var enemy_cells = get_adjacent_cells(cell)
+#			#print("Enemy Cells: ", enemy_cells)
+#			for enemy_cell in enemy_cells.values():
+#				var path = astar.get_id_path(start, enemy_cell)
+#				var distance = path.size()
+#				if distance < closest_distance:
+#					closest_distance = distance
+#					closest_cell = enemy_cell
+#	if closest_cell == null:
+#		return "skip turn"
+#	else:
+#		return closest_cell
+
+
+func get_closest_unit_cell(caller: Unit, group: String):
+	var closest_cell = null
+	var closest_distance = INF
+	var start = caller.current_cell
+	
+#?#	print("Start cell: ", start)
+	
+	for cell in units.keys():
+#?#		print("\nChecking cell: ", cell)
+		if cell == caller.current_cell:  # Skip the caller itself
+#?#			print("Skipping caller's cell")
+			continue
+		if units[cell].group != group:
+#?#			print("Cell belongs to enemy group")
+			var enemy_cells = get_adjacent_cells(cell)
+#?#			print("Enemy Cells: ", enemy_cells)
+			for enemy_cell in enemy_cells.values():
+				if astar.is_point_solid(enemy_cell):  # Skip solid cells
+#?#					print("Skipping solid cell: ", enemy_cell)
+					continue
+#?#				print("Checking enemy cell: ", enemy_cell)
+				var path = astar.get_id_path(start, enemy_cell)
+#?#				print("Path from start to enemy cell: ", path)
+				var distance = path.size()
+#?#				print("Distance from start to enemy cell: ", distance)
+				if distance < closest_distance:
+#?#					print("Found closer cell")
+					closest_distance = distance
+					closest_cell = enemy_cell
+		else:
+			print("Cell belongs to same group")
+	
+	if closest_cell == null:
+		print("No enemy cells found")
+		return "skip turn"
+	else:
+		print("Closest enemy cell: ", closest_cell)
+		return closest_cell
+		
+
+# Marks Cells as Solid
+func make_cell_solid(cell):
+	astar.set_point_solid(cell, true)
+	occupied_cells_local.append(tile_map.map_to_local(cell))
+
+
+
+
+
+func make_cell_free(cell):
+	astar.set_point_solid(cell, false)
+	occupied_cells_local.erase(tile_map.map_to_local(cell))
+
+
+
 
 
 func get_tile_map(): #Used _on_map_loaded
 	tile_map = map.get_child(0)
+
+
+
+
 
 func init_astar(): #Used _on_map_loaded
 	astar = AStarGrid2D.new() #create grid
@@ -66,7 +193,7 @@ func init_astar(): #Used _on_map_loaded
 				x + int(tile_map.get_used_rect().position.x),
 				y + int(tile_map.get_used_rect().position.y)
 			)
-
+			
 			var is_solid = false
 			for layer in range(tile_map.get_layers_count()):  # Iterate over the layers
 				var tile_data = tile_map.get_cell_tile_data(layer, tile_position)
@@ -81,10 +208,14 @@ func init_astar(): #Used _on_map_loaded
 				
 			astar.set_point_solid(tile_position, is_solid)
 
-func get_free_cell(): #Returns a free cell in grid coords
+
+
+
+
+func get_free_random_cell(): #Returns a random free cell in grid coords
 	var free_cell = free_cells.pick_random()
 	return free_cell
 
-func get_free_cell_local(): #Returns a free cell in pixel coords
+func get_free_random_cell_local(): #Returns a random free cell in pixel coords
 	var free_cell = free_cells_local.pick_random()
 	return free_cell

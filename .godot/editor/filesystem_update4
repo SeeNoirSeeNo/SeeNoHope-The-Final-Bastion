@@ -1,3 +1,11 @@
+
+res://Agents&Tools/NavigationGrid/NavigationGrid.tscn
+res://MainScenes/Battle.tscn
+res://Units/CaveGoblin/CaveGoblin.tscn
+res://Units/FlyingEye/FlyingEye.tscn
+res://timeline.tscn
+res://MainScenes/Battle.gd
+
 res://MainScenes/Battle.tscn
 res://MainScenes/Battle.gd
 res://Agents&Tools/UnitFactory/UnitFactory.tscn
@@ -6,3 +14,4 @@ res://Units/CaveGoblin/CaveGoblin.tscn
 res://Units/FlyingEye/FlyingEye.tscn
 res://BattleMaps/Caves/Cave01.tscn
 res://BattleMaps/Caves/Cave02.tscn
+

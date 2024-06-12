@@ -391,6 +391,10 @@ _data = {
 
 [node name="CaveGoblin" type="CharacterBody2D"]
 script = ExtResource("1_t1e8x")
+unit_type = "Cave Goblin"
+speed = 5
+time_units = 125
+health_points = 100
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2pi0q")
