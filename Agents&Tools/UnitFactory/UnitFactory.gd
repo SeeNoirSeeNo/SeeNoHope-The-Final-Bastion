@@ -2,9 +2,10 @@ extends Node
 
 class_name UnitFactory
 ### SIGNALS ###
+signal unit_created(unit: Unit)
 ### @EXPORTS ###
 ### @ONREADY ###
-@onready var navigation_grid = $"../NavigationGrid"
+@onready var navigation_grid : NavigationGrid = $"../NavigationGrid"
 @onready var map = $"../../Map"
 ### VARIABLES ###
 var possible_units = ["FlyingEye", "CaveGoblin"]
@@ -13,40 +14,27 @@ var unit_group : Array[PackedScene]
 
 ### FUNCTIONS ###
 
-func _on_map_loaded(_map_name):
-	tile_map = map.get_child(0)
 
-#func spawn_group():
-#	for unit in unit_group:
-#		var position = map.get_random_available_cell()
-#		create_unit(unit, position, get_node("/root/Battle/Units/Enemy"), "enemy")
-
-
-#func add_unit_to_group(type, amount):
-#	var unit_scene = get_unit_scene(type)
-#	for number in amount:
-#		unit_group.append(unit_scene)
-
-
-
-
-
-#CREATES A NEW UNIT
-# Spawns a group of units.
-# `unit_type` is the type of units to spawn.
-# `position` is the position at which to spawn the units.5
-func create_unit(type: String, position: Vector2i, parent: String, group: String):
+func create_unit(type: String, position: Vector2i, parent: String, group: String, is_cell: bool):
 	
 	var unit_scene = get_unit_scene(type) #Load the matching scene for the unit type
 	var unit = unit_scene.instantiate() #Instantiate the packed scene
-	var parent_node = match_parent(parent)
+	var parent_node = match_parent(parent) #Find the parent
 	parent_node.add_child(unit) #Add the Unit as a Child of the given Parent
 
-	var grid_position = tile_map.local_to_map(position)
-	unit.global_position = tile_map.map_to_local(grid_position)#5 + Vector2(16, 16)
-
-	unit.add_to_group(group) #Add the Unit to the correct group
-
+	#Handle the positioning of the new unit
+	var cell
+	if is_cell:
+		cell = position
+	else:
+		cell = tile_map.local_to_map(position)
+	unit.current_cell = cell
+	unit.global_position = tile_map.map_to_local(cell)
+	unit.group = group
+	#Send the unit created signal
+	emit_signal("unit_created", unit)
+	print("UnitFactory: signal unit_created send!")
+	
 func get_unit_scene(type: String):
 	#Load the matching scene for the unit type
 	var unit_scene : PackedScene
@@ -73,7 +61,11 @@ func match_parent(parent) -> Node:
 			printerr("Invalid parent type")
 	return parent_node
 
-		
+
+#Get The Reference to the Tile Map
+func _on_map_loaded(_map_name):
+	tile_map = map.get_child(0)
+	
 #func _input(event):
 #	if event.is_action_pressed("unit"):
 #		spawn_unit()

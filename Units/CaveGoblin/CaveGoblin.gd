@@ -1,4 +1,4 @@
-extends BaseUnit
+extends Unit
 
 func _init():
-	self.speed = 5
+	pass

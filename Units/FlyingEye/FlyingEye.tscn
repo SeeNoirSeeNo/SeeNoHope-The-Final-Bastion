@@ -347,6 +347,10 @@ _data = {
 
 [node name="FlyingEye" type="CharacterBody2D"]
 script = ExtResource("1_4nd0p")
+unit_type = "Flying Eye"
+speed = 6
+time_units = 133
+health_points = 66
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2pi0q")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bir852iq3v7sq"]
+[gd_scene load_steps=8 format=3 uid="uid://bir852iq3v7sq"]
 
 [ext_resource type="Script" path="res://MainScenes/Battle.gd" id="1_wgiy2"]
 [ext_resource type="PackedScene" uid="uid://duelxmv41oxw4" path="res://Agents&Tools/MapPicker/MapPicker.tscn" id="2_efjwm"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ctvbsbyvjp67g" path="res://Agents&Tools/NavigationGrid/path_indicator.tscn" id="4_drxas"]
 [ext_resource type="PackedScene" uid="uid://cm2c1w55mxnuw" path="res://Agents&Tools/UnitFactory/UnitFactory.tscn" id="5_t8cve"]
 [ext_resource type="Script" path="res://MainScenes/Camera2D.gd" id="6_msmka"]
+[ext_resource type="Script" path="res://Timeline.gd" id="6_t15fm"]
 
 [node name="Battle" type="Node"]
 script = ExtResource("1_wgiy2")
@@ -22,6 +23,9 @@ script = ExtResource("1_wgiy2")
 
 [node name="MapPicker" parent="Agents" instance=ExtResource("2_efjwm")]
 
+[node name="Timeline" type="Node" parent="Agents"]
+script = ExtResource("6_t15fm")
+
 [node name="Units" type="Node" parent="."]
 
 [node name="Enemy" type="Node" parent="Units"]
@@ -31,4 +35,5 @@ script = ExtResource("1_wgiy2")
 [node name="Neutral" type="Node" parent="Units"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(576, 325)
 script = ExtResource("6_msmka")

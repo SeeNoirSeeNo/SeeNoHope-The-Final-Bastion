@@ -1,9 +1,9 @@
+res://Agents&Tools/NavigationGrid/NavigationGrid.tscn
 res://Agents&Tools/NavigationGrid/NavigationGrid.gd
 res://MainScenes/Battle.tscn
-res://Agents&Tools/UnitFactory/UnitFactory.tscn
-res://Units/BaseUnit/BaseUnit.tscn
-res://Agents&Tools/UnitFactory/UnitFactory.gd
-res://MainScenes/Battle.gd
 res://Units/CaveGoblin/CaveGoblin.tscn
 res://Units/FlyingEye/FlyingEye.tscn
-res://MainScenes/Camera2D.gd
+res://timeline.tscn
+res://Units/BaseUnit/BaseUnit.gd
+res://MainScenes/Battle.gd
+res://Timeline.gd
