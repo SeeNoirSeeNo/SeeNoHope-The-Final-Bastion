@@ -18,6 +18,7 @@ func _ready():
 	unit_factory.create_unit("CaveGoblin", Vector2i(28,3), "Player", "Player", true)
 	unit_factory.create_unit("FlyingEye", Vector2i(26,18), "Enemy", "Enemy", true)
 	unit_factory.create_unit("FlyingEye", Vector2i(15,3), "Enemy", "Enemy", true)
+	unit_factory.create_unit("FlyingEye", Vector2i(17,3), "Enemy", "Enemy", true)
 
 #SPAWN RANDOM UNITS
 #	for i in range(1): 

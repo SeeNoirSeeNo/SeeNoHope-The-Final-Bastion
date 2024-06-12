@@ -3,3 +3,4 @@ res://MainScenes/Battle.tscn
 res://Units/CaveGoblin/CaveGoblin.tscn
 res://Units/FlyingEye/FlyingEye.tscn
 res://timeline.tscn
+res://MainScenes/Battle.gd

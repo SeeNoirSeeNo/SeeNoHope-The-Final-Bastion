@@ -11,3 +11,7 @@ export_presets.cfg
 .mono/
 data_*/
 /.godot
+.godot/editor/filesystem_update4
+.godot/editor/filesystem_cache8
+.godot/editor/filesystem_update4
+.godot/editor/script_editor_cache.cfg
