@@ -25,11 +25,16 @@ func _process(delta):
 			previous_mouse_grid_position = current_mouse_grid_position
 			print(current_mouse_grid_position)
 
-func move_unit(unit: Unit, new_position):
+func leave_old_cell(unit: Unit):
 	if units.has(unit.current_cell):
 		units.erase(unit.current_cell)
 		make_cell_free(unit.current_cell)
-
+		print("NavigationGrid: UnitDict after unit left old cell: ", units)
+		
+func enter_new_cell(unit: Unit):
+	units[unit.current_cell] = unit #Add Unit To Units Dictionary
+	make_cell_solid(unit.current_cell) #Make Cell Solid
+	print("NavigationGrid: UnitDict after unit entered new cell: ", units)
 
 
 
@@ -64,6 +69,7 @@ func _on_map_loaded(_map_name): #Initalize A*GRID2D
 func _on_unit_created(unit: Unit):
 	units[unit.current_cell] = unit #Add Unit To Units Dictionary
 	make_cell_solid(unit.current_cell) #Make Cell Solid
+	print("NavigationGrid: UnitDict after unit was created: ", units)
 
 #Converts Local (Global?) Position To Grid Coords
 func get_cell(local_position: Vector2) -> Vector2i:
@@ -91,57 +97,33 @@ func get_adjacent_units(caller: Unit, group: String):
 	return adjacent_units
 
 
-
-#func get_closest_unit_cell(caller: Unit, group: String):
-#	var closest_cell = null
-#	var closest_distance = INF
-#	var start = caller.current_cell
-#
-#	for cell in units.keys():
-#		if cell == caller.current_cell:  # Skip the caller itself
-#			continue
-#		if units[cell].group != group:
-#			var enemy_cells = get_adjacent_cells(cell)
-#			#print("Enemy Cells: ", enemy_cells)
-#			for enemy_cell in enemy_cells.values():
-#				var path = astar.get_id_path(start, enemy_cell)
-#				var distance = path.size()
-#				if distance < closest_distance:
-#					closest_distance = distance
-#					closest_cell = enemy_cell
-#	if closest_cell == null:
-#		return "skip turn"
-#	else:
-#		return closest_cell
-
-
 func get_closest_unit_cell(caller: Unit, group: String):
 	var closest_cell = null
 	var closest_distance = INF
 	var start = caller.current_cell
 	
-#?#	print("Start cell: ", start)
-	
+	print("Start cell: ", start)
+	print("All Units: ", units)
 	for cell in units.keys():
-#?#		print("\nChecking cell: ", cell)
+		print("\nChecking cell: ", cell)
 		if cell == caller.current_cell:  # Skip the caller itself
-#?#			print("Skipping caller's cell")
+			print("Skipping caller's cell")
 			continue
 		if units[cell].group != group:
-#?#			print("Cell belongs to enemy group")
+			print("Cell belongs to enemy group")
 			var enemy_cells = get_adjacent_cells(cell)
-#?#			print("Enemy Cells: ", enemy_cells)
+			print("Enemy Cells: ", enemy_cells)
 			for enemy_cell in enemy_cells.values():
 				if astar.is_point_solid(enemy_cell):  # Skip solid cells
-#?#					print("Skipping solid cell: ", enemy_cell)
+					print("Skipping solid cell: ", enemy_cell)
 					continue
-#?#				print("Checking enemy cell: ", enemy_cell)
+				print("Checking enemy cell: ", enemy_cell)
 				var path = astar.get_id_path(start, enemy_cell)
-#?#				print("Path from start to enemy cell: ", path)
+				print("Path from start to enemy cell: ", path)
 				var distance = path.size()
-#?#				print("Distance from start to enemy cell: ", distance)
+				print("Distance from start to enemy cell: ", distance)
 				if distance < closest_distance:
-#?#					print("Found closer cell")
+					print("Found closer cell")
 					closest_distance = distance
 					closest_cell = enemy_cell
 		else:
@@ -149,7 +131,7 @@ func get_closest_unit_cell(caller: Unit, group: String):
 	
 	if closest_cell == null:
 		print("No enemy cells found")
-		return "skip turn"
+		return Vector2i.ZERO
 	else:
 		print("Closest enemy cell: ", closest_cell)
 		return closest_cell

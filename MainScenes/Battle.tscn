@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ctvbsbyvjp67g" path="res://Agents&Tools/NavigationGrid/path_indicator.tscn" id="4_drxas"]
 [ext_resource type="PackedScene" uid="uid://cm2c1w55mxnuw" path="res://Agents&Tools/UnitFactory/UnitFactory.tscn" id="5_t8cve"]
 [ext_resource type="Script" path="res://MainScenes/Camera2D.gd" id="6_msmka"]
-[ext_resource type="Script" path="res://Timeline.gd" id="6_t15fm"]
+[ext_resource type="Script" path="res://Agents&Tools/Timeline/Timeline.gd" id="6_t15fm"]
 
 [node name="Battle" type="Node"]
 script = ExtResource("1_wgiy2")

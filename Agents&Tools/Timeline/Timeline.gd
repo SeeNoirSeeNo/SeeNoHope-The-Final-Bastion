@@ -26,26 +26,40 @@ func start_turn() -> void:
 		current_unit.start_turn()
 
 func _on_turn_finished():
-	print("turn finished")
+	print("Turn finished")
 	end_turn()
 	
 func end_turn() -> void:
 	print("Ending turn for unit: ", current_unit.unit_type)
+	print("CURRENT UNIT IS: " , current_unit)
 	if all_units_done_for_round():
 		print("All units done for the round. Starting new round.")
 		start_new_round()
 	else:
+
 		if current_unit != null:
 			timeline.append(current_unit)
 			timeline.sort_custom(compare_time_units)
+			for unit in timeline:
+				var tu = unit.current_time_units
+				print(unit, "My Time units: ", tu)
+			print("Current timeline AFTER custom sorting: ", timeline)
 			current_unit = null
 		start_turn()
 
-func compare_time_units(unit1 : Unit, unit2 : Unit) -> int:
-	if unit1.current_time_units < unit2.current_time_units:
+
+
+func compare_time_units(unit1 : Unit, unit2 : Unit) -> bool:
+	if unit1.current_time_units > unit2.current_time_units:
 		return true
 	else:
 		return false
+
+
+func print_time_units(timeline : Array) -> void:
+	for unit in timeline:
+		var tu = unit.current_time_units
+		print(unit, "My Time units: ", tu)
 
 func all_units_done_for_round() -> bool:
 	for unit in timeline:
