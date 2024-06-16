@@ -17,9 +17,9 @@ func _ready():
 
 	unit_factory.create_unit("CaveGoblin", Vector2i(2,18), "Player", "Player", true)
 	unit_factory.create_unit("CaveGoblin", Vector2i(28,3), "Player", "Player", true)
-	unit_factory.create_unit("FlyingEye", Vector2i(26,18), "Enemy", "Enemy", true)
-	unit_factory.create_unit("FlyingEye", Vector2i(15,3), "Enemy", "Enemy", true)
-	unit_factory.create_unit("FlyingEye", Vector2i(17,3), "Enemy", "Enemy", true)
+	unit_factory.create_unit("FlyingEye", Vector2i(17,8), "Enemy", "Enemy", true)
+#	unit_factory.create_unit("FlyingEye", Vector2i(15,3), "Enemy", "Enemy", true)
+#	unit_factory.create_unit("FlyingEye", Vector2i(17,3), "Enemy", "Enemy", true)
 	
 	await get_tree().create_timer(1).timeout #wait a second 
 	timeline.start_turn()
@@ -33,4 +33,3 @@ func connect_signals():
 		
 func _on_unit_created(unit):
 	unit.turn_finished.connect(timeline._on_turn_finished)
-	print("Battle: Turn Finished Signal Connected to ")

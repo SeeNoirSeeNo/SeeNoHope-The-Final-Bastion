@@ -33,7 +33,7 @@ func create_unit(type: String, position: Vector2i, parent: String, group: String
 	unit.group = group
 	#Send the unit created signal
 	emit_signal("unit_created", unit)
-	print("UnitFactory: signal unit_created send!")
+#	print("UnitFactory: signal unit_created send!")
 	
 func get_unit_scene(type: String):
 	#Load the matching scene for the unit type
