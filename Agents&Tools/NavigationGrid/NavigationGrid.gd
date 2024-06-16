@@ -25,35 +25,49 @@ func _process(delta):
 			previous_mouse_grid_position = current_mouse_grid_position
 			print(current_mouse_grid_position)
 
-func leave_old_cell(unit: Unit):
+
+func erase_unit_from_dict(unit):
 	if units.has(unit.current_cell):
 		units.erase(unit.current_cell)
-		make_cell_free(unit.current_cell)
-		print("NavigationGrid: UnitDict after unit left old cell: ", units)
-		
-func enter_new_cell(unit: Unit):
-	units[unit.current_cell] = unit #Add Unit To Units Dictionary
-	make_cell_solid(unit.current_cell) #Make Cell Solid
-	print("NavigationGrid: UnitDict after unit entered new cell: ", units)
+		print("NavigationGrid: UnitDict AFTER unit left old cell: ", units)
 
 
+func add_unit_to_dict(unit):
+	units[unit.current_cell] = unit 
+	print("NavigationGrid: UnitDict after unit walking_to_new_cell: ", units)
 
+
+#Sets a cells SOLID attribute to TRUE or FALSE
+func set_cells_solid_state(cell, state):
+	if cell != null:
+		astar.set_point_solid(cell, state)
+	if state == true:
+		occupied_cells.append(cell)
+		if free_cells.has(cell):
+			free_cells.erase(cell)
+	else:
+		free_cells.append(cell)
+		if occupied_cells.has(cell):
+			occupied_cells.erase(cell)
+
+func redraw_grid():
+	queue_redraw()
 
 #PRESS-E for DEBUG Info
 func _input(event):
 	if event.is_action_pressed("debug"):
 		draw_circles = !draw_circles
 		queue_redraw()
-		print("NavigationGrid: Draw Circles = ", draw_circles)
+
 
 
 #Draw Debug Info
 func _draw():
 	if draw_circles:
-		for cell in free_cells_local:
-			draw_circle(cell, 3, Color.GREEN)
-		for cell in occupied_cells_local:
-			draw_circle(cell, 3, Color.RED)
+		for cell in free_cells:
+			draw_circle(tile_map.map_to_local(cell), 3, Color.GREEN)
+		for cell in occupied_cells:
+			draw_circle(tile_map.map_to_local(cell), 3, Color.RED)
 
 
 
@@ -63,13 +77,14 @@ func _on_map_loaded(_map_name): #Initalize A*GRID2D
 	get_tile_map() #Get the current tile map
 	init_astar() #Apply the AStarGrid2D
 	###DEBUG###
-	print("NavigationGrid: Init of AStarfinished!")
+#	print("NavigationGrid: Init of AStarfinished!")
 
 #When a unit is created, we put it in the units dict and block the cell
 func _on_unit_created(unit: Unit):
 	units[unit.current_cell] = unit #Add Unit To Units Dictionary
-	make_cell_solid(unit.current_cell) #Make Cell Solid
+	set_cells_solid_state(unit.current_cell, true) #Make Cell Solid
 	print("NavigationGrid: UnitDict after unit was created: ", units)
+
 
 #Converts Local (Global?) Position To Grid Coords
 func get_cell(local_position: Vector2) -> Vector2i:
@@ -97,33 +112,33 @@ func get_adjacent_units(caller: Unit, group: String):
 	return adjacent_units
 
 
-func get_closest_unit_cell(caller: Unit, group: String):
+func get_closest_unit_cell(caller: Unit, group: String) -> Vector2i:
 	var closest_cell = null
 	var closest_distance = INF
 	var start = caller.current_cell
 	
-	print("Start cell: ", start)
-	print("All Units: ", units)
+#	print("Start cell: ", start)
+#	print("All Units: ", units)
 	for cell in units.keys():
-		print("\nChecking cell: ", cell)
+#		print("\nChecking cell: ", cell)
 		if cell == caller.current_cell:  # Skip the caller itself
-			print("Skipping caller's cell")
+#			print("Skipping caller's cell")
 			continue
 		if units[cell].group != group:
-			print("Cell belongs to enemy group")
+#			print("Cell belongs to enemy group")
 			var enemy_cells = get_adjacent_cells(cell)
-			print("Enemy Cells: ", enemy_cells)
+#			print("Enemy Cells: ", enemy_cells)
 			for enemy_cell in enemy_cells.values():
 				if astar.is_point_solid(enemy_cell):  # Skip solid cells
-					print("Skipping solid cell: ", enemy_cell)
+#					print("Skipping solid cell: ", enemy_cell)
 					continue
-				print("Checking enemy cell: ", enemy_cell)
+#				print("Checking enemy cell: ", enemy_cell)
 				var path = astar.get_id_path(start, enemy_cell)
-				print("Path from start to enemy cell: ", path)
+#				print("Path from start to enemy cell: ", path)
 				var distance = path.size()
-				print("Distance from start to enemy cell: ", distance)
+#				print("Distance from start to enemy cell: ", distance)
 				if distance < closest_distance:
-					print("Found closer cell")
+#					print("Found closer cell")
 					closest_distance = distance
 					closest_cell = enemy_cell
 		else:
@@ -137,18 +152,7 @@ func get_closest_unit_cell(caller: Unit, group: String):
 		return closest_cell
 		
 
-# Marks Cells as Solid
-func make_cell_solid(cell):
-	astar.set_point_solid(cell, true)
-	occupied_cells_local.append(tile_map.map_to_local(cell))
 
-
-
-
-
-func make_cell_free(cell):
-	astar.set_point_solid(cell, false)
-	occupied_cells_local.erase(tile_map.map_to_local(cell))
 
 
 

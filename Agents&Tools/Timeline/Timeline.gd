@@ -6,13 +6,13 @@ var timeline : Array = [] #List of all units
 var current_unit : Node = null #The unit who's turn it is
 
 func add_unit(unit : Node) -> void:
-	print("Adding unit to timeline: ", unit.unit_type)
+#	print("Adding unit to timeline: ", unit.unit_type)
 	timeline.append(unit)
 	timeline.sort_custom(compare_time_units)
-	print("Current timeline: ", timeline)
+#	print("Current timeline: ", timeline)
 	
 func _on_unit_created(unit):
-	print("Unit created: ", unit.unit_type)	
+#	print("Unit created: ", unit.unit_type)	
 	add_unit(unit)
 
 

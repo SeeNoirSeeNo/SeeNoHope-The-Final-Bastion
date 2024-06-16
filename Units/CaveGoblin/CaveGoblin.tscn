@@ -391,8 +391,7 @@ _data = {
 
 [node name="CaveGoblin" type="CharacterBody2D"]
 script = ExtResource("1_t1e8x")
-unit_type = "Cave Goblin"
-speed = 5
+speed = 200
 time_units = 125
 health_points = 100
 
