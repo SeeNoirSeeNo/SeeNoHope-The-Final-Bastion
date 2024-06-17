@@ -29,7 +29,7 @@ var is_done_for_the_round : bool = false
 var current_health_points : int
 
 var attack_range : int = 1
-var actions : Dictionary = { "move" : 1, "attack" : 40}
+var actions : Dictionary = { "move" : 20, "attack" : 40}
 var group : String
 
 var is_active : bool = false
@@ -88,16 +88,17 @@ func move():
 
 func move_along_path(delta):
 	if active_path.is_empty():
-		emit_signal("turn_finished")
-		print("done with moving and turn_finished signal send ")
 		current_cell = get_my_current_cell()
 		navigation_grid.add_unit_to_dict(self)
+		#adjacent_cells = navigation_grid.get_adjacent_cells(current_cell)
 		is_moving = false
+		set_active(false)
+		emit_signal("turn_finished")
 		return
 
 	var next_cell = active_path.front() # Next Cell Of The Path
-	
-	navigation_grid.set_cells_solid_state(active_path.back(), true)
+	if active_path.size() > 1:
+		navigation_grid.set_cells_solid_state(active_path.back(), true)
 	navigation_grid.set_cells_solid_state(current_cell, false)
 
 	global_position = global_position.move_toward(map.map_to_local(next_cell), speed * delta)
@@ -107,7 +108,7 @@ func move_along_path(delta):
 		navigation_grid.redraw_grid()
 		active_path.pop_front()
 
-		print_if_active(["Active path after moving: ", active_path])
+#		print_if_active(["Active path after moving: ", active_path])
 		path_line.remove_point(0)
 
 

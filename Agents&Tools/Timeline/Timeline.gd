@@ -17,9 +17,11 @@ func _on_unit_created(unit):
 
 
 func start_turn() -> void:
+	#await get_tree().create_timer(0.1).timeout
 	if timeline.size() > 0:
 		if current_unit != null:
 			current_unit.set_active(false)
+		current_unit = timeline.front()	
 		current_unit = timeline.pop_front()
 		print("Starting turn for unit: ", current_unit.unit_type)
 		current_unit.set_active(true)
