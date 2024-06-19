@@ -3,7 +3,8 @@ extends Node
 class_name Timeline
 
 var timeline : Array = [] #List of all units
-var current_unit : Node = null #The unit who's turn it is
+#var current_unit : Node = null #The unit who's turn it is
+var current_unit : Unit = null #The unit who's turn it is
 
 func add_unit(unit : Node) -> void:
 #	print("Adding unit to timeline: ", unit.unit_type)
@@ -28,12 +29,10 @@ func start_turn() -> void:
 		current_unit.start_turn()
 
 func _on_turn_finished():
-	print("Turn finished")
 	end_turn()
 	
 func end_turn() -> void:
-	print("Ending turn for unit: ", current_unit.unit_type)
-	print("CURRENT UNIT IS: " , current_unit)
+	print("Ending turn for unit: ", current_unit.unit_type, "\n")
 	if all_units_done_for_round():
 		print("All units done for the round. Starting new round.")
 		start_new_round()
@@ -44,8 +43,8 @@ func end_turn() -> void:
 			timeline.sort_custom(compare_time_units)
 			for unit in timeline:
 				var tu = unit.current_time_units
-				print(unit, "My Time units: ", tu)
-			print("Current timeline AFTER custom sorting: ", timeline)
+#?#				print(unit, "My Time units: ", tu)
+#?#			print("Current timeline AFTER custom sorting: ", timeline)
 			current_unit = null
 		start_turn()
 
@@ -61,7 +60,7 @@ func compare_time_units(unit1 : Unit, unit2 : Unit) -> bool:
 func print_time_units(timeline : Array) -> void:
 	for unit in timeline:
 		var tu = unit.current_time_units
-		print(unit, "My Time units: ", tu)
+#?#		print(unit, "My Time units: ", tu)
 
 func all_units_done_for_round() -> bool:
 	for unit in timeline:

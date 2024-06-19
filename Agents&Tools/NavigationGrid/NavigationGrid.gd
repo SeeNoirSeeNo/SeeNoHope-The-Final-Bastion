@@ -29,7 +29,7 @@ func _process(delta):
 func erase_unit_from_dict(unit):
 	if units.has(unit.current_cell):
 		units.erase(unit.current_cell)
-		print("NavigationGrid: UnitDict AFTER unit left old cell: ", units)
+#?#		print("NavigationGrid: UnitDict AFTER unit left old cell: ", units)
 
 
 func add_unit_to_dict(unit):
@@ -83,7 +83,7 @@ func _on_map_loaded(_map_name): #Initalize A*GRID2D
 func _on_unit_created(unit: Unit):
 	units[unit.current_cell] = unit #Add Unit To Units Dictionary
 	set_cells_solid_state(unit.current_cell, true) #Make Cell Solid
-	print("NavigationGrid: UnitDict after unit was created: ", units)
+#?#	print("NavigationGrid: UnitDict after unit was created: ", units)
 
 
 #Converts Local (Global?) Position To Grid Coords
@@ -117,32 +117,32 @@ func get_closest_unit_cell(caller: Unit, group: String) -> Vector2i:
 	var closest_distance = INF
 	var start = caller.current_cell
 	
-	print("Start cell: ", start)
-	print("All Units: ", units)
+#?#	print("Start cell: ", start)
+#?#	print("All Units: ", units)
 	for cell in units.keys():
-		print("\nChecking cell: ", cell)
+#?#		print("\nChecking cell: ", cell)
 		if cell == caller.current_cell:  # Skip the caller itself
-			print("Skipping caller's cell")
+#?#			print("Skipping caller's cell")
 			continue
 		if units[cell].group != group:
-			print("Cell belongs to enemy group")
+#?#			print("Cell belongs to enemy group")
 			var enemy_cells = get_adjacent_cells(cell)
-			print("Enemy Cells: ", enemy_cells)
+#?#			print("Enemy Cells: ", enemy_cells)
 			for enemy_cell in enemy_cells.values():
 				if astar.is_point_solid(enemy_cell):  # Skip solid cells
-					print("Skipping solid cell: ", enemy_cell)
+#?#					print("Skipping solid cell: ", enemy_cell)
 					continue
-				print("Checking enemy cell: ", enemy_cell)
+#?#				print("Checking enemy cell: ", enemy_cell)
 				var path = astar.get_id_path(start, enemy_cell)
-				print("Path from start to enemy cell: ", path)
+#?#				print("Path from start to enemy cell: ", path)
 				var distance = path.size()
-				print("Distance from start to enemy cell: ", distance)
+#?#				print("Distance from start to enemy cell: ", distance)
 				if distance < closest_distance:
-					print("Found closer cell")
+#?#					print("Found closer cell")
 					closest_distance = distance
 					closest_cell = enemy_cell
-		else:
-			print("Cell belongs to same group")
+#?#		else:
+#?#			print("Cell belongs to same group")
 	
 	if closest_cell == null:
 		print("No enemy cells found")

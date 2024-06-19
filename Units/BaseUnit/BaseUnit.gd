@@ -55,7 +55,7 @@ func set_active(active : bool) -> void:
 
 
 func start_turn():
-	print("I am ", self, " and it's my turn! I choose my action now: ")
+#?#	print("I am ", self, " and it's my turn! I choose my action now: ")
 	choose_action()
 
 func choose_action():
@@ -90,7 +90,7 @@ func move_along_path(delta):
 	if active_path.is_empty():
 		current_cell = get_my_current_cell()
 		navigation_grid.add_unit_to_dict(self)
-		#adjacent_cells = navigation_grid.get_adjacent_cells(current_cell)
+		adjacent_cells = navigation_grid.get_adjacent_cells(current_cell)
 		is_moving = false
 		set_active(false)
 		emit_signal("turn_finished")
@@ -152,13 +152,13 @@ func initiliaze_variables():
 
 
 func pay_movement_cost_and_update_path() -> Array[Vector2i]:
-	print_if_active(["time_units: ", current_time_units])
+#?#	print_if_active(["time_units: ", current_time_units])
 	var cells_to_move = min(current_time_units / actions["move"], active_path.size() -1) # -1 to exclude current_cell (???)
-	print_if_active(["Cells to move: ", cells_to_move])
+#?#	print_if_active(["Cells to move: ", cells_to_move])
 	current_time_units -= cells_to_move * actions["move"]
 	print_if_active(["Current time units after paying for movement: ", current_time_units])
 	var path = active_path.slice(0, int(cells_to_move) +1) # +1 because we count the first cell as well (???)
-	print_if_active(["My Active Path after paying for movement: ", path])
+#?#	print_if_active(["My Active Path after paying for movement: ", path])
 	return path
 
 
