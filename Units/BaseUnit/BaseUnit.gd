@@ -12,9 +12,11 @@ enum State {IDLE, MOVING, ATTACKING, TURN_FINISHED, ROUND_FINISHED}
 @onready var map = $"../../../Map".get_child(0)
 @onready var navigation_grid : NavigationGrid = $"../../../Agents/NavigationGrid"
 @onready var path_line : Line2D = $"../../../Agents/NavigationGrid/PathIndicator"
+@onready var animation_player : AnimationPlayer = $AnimationPlayer
+@onready var sprite = $Sprite2D
+
 ### VARIABLES ###
 var active_path: Array[Vector2i]
-var is_moving : bool = false
 var current_cell : Vector2i
 var adjacent_cells : Dictionary
 var state = State.IDLE
@@ -40,10 +42,14 @@ func _ready():
 	initiliaze_variables()
 
 func _process(delta):
-	if is_moving:
+	if state == State.MOVING:
 		move_along_path(delta)
-
-
+		play_movement_anim()
+	if state == State.IDLE:
+		play_idle_anim()
+	if state == State.ATTACKING:
+		play_attack_anim()
+		
 func _draw():
 	if is_active:
 		draw_circle(Vector2.ZERO, 15, Color.RED)
@@ -52,8 +58,17 @@ func set_active(active : bool) -> void:
 	is_active = active
 	queue_redraw()
 
-
-
+func play_movement_anim(): #Implemented in Children
+	if animation_player.has_animation("Run"):
+		animation_player.play("Run")
+		
+func play_idle_anim(): #Implemented in Children
+	if animation_player.has_animation("Idle"):
+		animation_player.play("Idle")
+		
+func play_attack_anim(): #Implemented in Children
+	if animation_player.has_animation("Attack"):
+		animation_player.play("Attack")
 func start_turn():
 #?#	print("I am ", self, " and it's my turn! I choose my action now: ")
 	choose_action()
@@ -82,16 +97,25 @@ func move():
 	var destination = get_destination()
 	active_path = get_path_to_destination(current_cell, destination)
 	active_path = pay_movement_cost_and_update_path()
-	is_moving = true
+	state = State.MOVING
 	update_path_line()
 
 
+#NEEDS MORE TESTING#
+func flip_sprite(current_pos, next_pos):
+	# Flip the sprite based on the direction of movement
+	print(current_pos.x, next_pos.x)
+	if current_pos.x > next_pos.x:
+		sprite.flip_h = true # Moving to the right
+	else:
+		sprite.flip_h = false # Moving to the left
+		
 func move_along_path(delta):
 	if active_path.is_empty():
 		current_cell = get_my_current_cell()
 		navigation_grid.add_unit_to_dict(self)
 		adjacent_cells = navigation_grid.get_adjacent_cells(current_cell)
-		is_moving = false
+		state = State.IDLE
 		set_active(false)
 		emit_signal("turn_finished")
 		return
@@ -99,6 +123,7 @@ func move_along_path(delta):
 	var next_cell = active_path.front() # Next Cell Of The Path
 	if active_path.size() > 1:
 		navigation_grid.set_cells_solid_state(active_path.back(), true)
+		flip_sprite(current_cell, active_path.front()) #Works, but I don't have a good feeling about it
 	navigation_grid.set_cells_solid_state(current_cell, false)
 
 	global_position = global_position.move_toward(map.map_to_local(next_cell), speed * delta)
@@ -110,7 +135,6 @@ func move_along_path(delta):
 
 #		print_if_active(["Active path after moving: ", active_path])
 		path_line.remove_point(0)
-
 
 
 func end_turn():
