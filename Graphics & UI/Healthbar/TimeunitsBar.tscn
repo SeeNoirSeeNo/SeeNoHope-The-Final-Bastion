@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://dyh8uta4b35pc"]
+
+[ext_resource type="Texture2D" uid="uid://dgqpjgqelq22r" path="res://Graphics & UI/Healthbar/enemy_health_bar_background_001.png" id="1_jem5j"]
+[ext_resource type="Texture2D" uid="uid://bdou4d2ow2mvm" path="res://Graphics & UI/Healthbar/enemy_health_bar_foreground_003.png" id="2_jg5yr"]
+[ext_resource type="Texture2D" uid="uid://c51tucm3koqeq" path="res://Graphics & UI/Healthbar/enemy_health_bar_003.png" id="3_07hqk"]
+[ext_resource type="Script" path="res://Graphics & UI/Healthbar/TimeunitsBar.gd" id="4_aauhg"]
+
+[node name="TimeunitsBar" type="TextureProgressBar"]
+offset_left = -13.0
+offset_top = -2.0
+offset_right = 243.0
+offset_bottom = 30.0
+scale = Vector2(0.101501, 0.101501)
+value = 66.0
+texture_under = ExtResource("1_jem5j")
+texture_over = ExtResource("2_jg5yr")
+texture_progress = ExtResource("3_07hqk")
+script = ExtResource("4_aauhg")
+
+[node name="ValueLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 98.0
+offset_right = 159.999
+offset_bottom = 26.0
+text = "200"
+horizontal_alignment = 1
+vertical_alignment = 2

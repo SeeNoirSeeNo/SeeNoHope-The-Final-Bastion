@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://d3rt8bsn4p76c"]
+[gd_scene load_steps=21 format=3 uid="uid://d3rt8bsn4p76c"]
 
 [ext_resource type="Script" path="res://Units/FlyingEye/FlyingEye.gd" id="1_4nd0p"]
 [ext_resource type="Texture2D" uid="uid://idak3dqujfmc" path="res://Units/FlyingEye/Flight.png" id="1_8cbkt"]
@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://by70e5f0axaqc" path="res://Units/FlyingEye/Death.png" id="5_7eiku"]
 [ext_resource type="Texture2D" uid="uid://uik46fhpo7lp" path="res://Units/FlyingEye/projectile_sprite.png" id="6_61831"]
 [ext_resource type="Texture2D" uid="uid://cd5nirbyl5b46" path="res://Units/FlyingEye/Take Hit.png" id="7_mwwga"]
+[ext_resource type="PackedScene" uid="uid://cxnfg7i60h8eq" path="res://Graphics & UI/Healthbar/healthbar.tscn" id="9_3fqap"]
+[ext_resource type="PackedScene" uid="uid://dyh8uta4b35pc" path="res://Graphics & UI/Healthbar/TimeunitsBar.tscn" id="10_vded4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2pi0q"]
 radius = 9.0
@@ -15,7 +17,6 @@ radius = 9.0
 [sub_resource type="Animation" id="Animation_jgxiq"]
 resource_name = "Attack"
 length = 0.8
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -349,7 +350,8 @@ _data = {
 script = ExtResource("1_4nd0p")
 unit_type = "Flying Eye"
 speed = 450
-time_units = 133
+timeunits = 80
+damage = 40
 health_points = 66
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -367,3 +369,11 @@ autoplay = "Idle"
 libraries = {
 "": SubResource("AnimationLibrary_elxut")
 }
+
+[node name="Healthbar" parent="." instance=ExtResource("9_3fqap")]
+offset_top = -18.0
+offset_bottom = 14.0
+
+[node name="TimeunitsBar" parent="." instance=ExtResource("10_vded4")]
+offset_top = -15.0
+offset_bottom = 17.0
