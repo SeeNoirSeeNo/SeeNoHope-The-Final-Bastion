@@ -8,7 +8,7 @@ signal unit_created(unit: Unit)
 @onready var navigation_grid : NavigationGrid = $"../NavigationGrid"
 @onready var map = $"../../Map"
 ### VARIABLES ###
-var possible_units = ["FlyingEye", "CaveGoblin"]
+var possible_units = ["FlyingEye", "CaveGoblin", "BananaMan"]
 var tile_map : TileMap
 var unit_group : Array[PackedScene]
 
@@ -43,6 +43,8 @@ func get_unit_scene(type: String):
 			unit_scene = load("res://Units/FlyingEye/FlyingEye.tscn")
 		"CaveGoblin":
 			unit_scene = load("res://Units/CaveGoblin/CaveGoblin.tscn")
+		"BananaMan":
+			unit_scene = load("res://Units/BananaMan/BananaMan.tscn")
 		_:
 			printerr("Invalid unit type")
 			return null	
