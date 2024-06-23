@@ -5,6 +5,7 @@ class_name Unit
 ### SIGNALS ###
 signal turn_finished()
 signal movement_finished()
+signal unit_died(unit)
 ### ENUMS ###
 enum State {IDLE, MOVING, ATTACKING, HIT, DEAD, TURN_FINISHED, ROUND_FINISHED}
 ### @EXPORT ###
@@ -36,7 +37,7 @@ var is_done_for_the_round : bool = false
 var current_health_points : int
 
 var attack_range : int = 1
-var actions : Dictionary = { "move" : 10, "attack" : 40}
+var actions : Dictionary = { "move" : 10, "attack" : 40, "wait" : 5}
 var group : String
 
 var is_active : bool = false
@@ -48,8 +49,9 @@ func _ready():
 
 func _process(delta):
 	if state == State.MOVING:
+		play_animation("Run")
 		move_along_path(delta)
-		play_animation("Movement")
+
 
 	if state == State.IDLE:
 		play_animation("Idle")
@@ -58,28 +60,58 @@ func _process(delta):
 		play_animation("TakeHit")
 		await animation_player.animation_finished
 		state = State.IDLE
-#
-#	if current_health_points <= 0:
-#		state = State.DEAD
 
 	if state == State.DEAD:
 		if is_dead == false:
+			is_dead = true
 			play_animation("Death")
+			emit_signal("unit_died", self)
 			await animation_player.animation_finished
 			healthbar.hide()
 			TU_bar.hide()
-			is_dead = true
+			queue_redraw()
+
+
+
+func attack():
+	print("I am ", self, " at cell ", current_cell, " and I choose to attack!")
+	var adjacent_enemies : Array = navigation_grid.get_adjacent_units(self, group)
+	var alive_enemies = adjacent_enemies.filter(func(enemy): return !enemy.is_dead)
+	if alive_enemies.is_empty():
+		emit_signal("turn_finished")
+	else:
+		var target_enemy : Unit = alive_enemies.pick_random()
+		flip_sprite_combat(current_cell, target_enemy.current_cell)
+		play_animation("Attack")
+		pay_attack_cost()
+		deal_damage(target_enemy, damage)
+		await animation_player.animation_finished
+		end_turn()
+
+func pay_wait_cost():
+	current_timeunits -= actions["wait"]
+	update_TU_bar(self)
+
+
+func pay_attack_cost():
+	current_timeunits -= actions["attack"]
+	update_TU_bar(self)
 
 
 func _draw():
+	var color = Color(1.0, 1.0, 1.0, 0.0) # Init invisible circle
 	if is_active:
-		var color = Color(1.0, 1.0, 1.0, 1.0) # Default to light blue
 		if is_in_group("Enemy"):
-			color = Color(1.0, 0.5, 0.5, 0.25) # Light red for enemies
+			color = Color(1.0, 0.5, 0.5, 0.55) # Light red for enemies
 		elif is_in_group("Player"):
-			color = Color(0.0, 0.5, 1.0, 0.25) # Light blue for players
-		draw_circle(Vector2.ZERO, 15, color)
-
+			color = Color(0.0, 0.5, 1.0, 0.55) # Light blue for players
+	else:
+		if not is_dead:
+			if is_in_group("Enemy"):
+				color = Color(1.0, 0.5, 0.5, 0.15) # Light red for enemies
+			elif is_in_group("Player"):
+				color = Color(0.0, 0.5, 1.0, 0.15) # Light blue for players
+	draw_circle(Vector2.ZERO, 15, color)
 
 #	if is_active:
 #		draw_circle(Vector2.ZERO, 15, Color.RED)
@@ -99,40 +131,42 @@ func start_turn():
 	choose_action()
 
 func choose_action():
+	### ATTACK ###
 	if current_timeunits >= actions["attack"] && is_alive_enemy_near():
 		state = State.ATTACKING
 		attack()
+	### MOVE ###
 	elif current_timeunits >= actions["move"] && not is_alive_enemy_near():
 		state = State.MOVING
 		move()
+	### WAIT ###
 	elif current_timeunits >= actions.values().min() && not is_done_for_the_round: #SHOULD COMPARISSION BE TURNED AROUND?!
 		state = State.TURN_FINISHED
+		pay_wait_cost()
 		end_turn()
 	else:
+		### END ROUND ###
 		state = State.ROUND_FINISHED
+		is_done_for_the_round = true
 		end_round()
 
-func attack():
-	print("I am ", self, " and I choose to attack!")
-	var adjacent_enemies : Array = navigation_grid.get_adjacent_units(self, group)
-	var alive_enemies = adjacent_enemies.filter(func(enemy): return !enemy.is_dead)
-	if alive_enemies.is_empty():
-		emit_signal("turn_finished")
+
+
+
+
+	
+func deal_damage(target, dmg):
+	if target.has_method("take_damage"):
+		target.take_damage(dmg)
+
+func take_damage(damage):
+	current_health_points -= damage
+	if current_health_points <= 0:
+		current_health_points = 0
+		state = State.DEAD
 	else:
-		var target_enemy : Unit = alive_enemies.pick_random()
-		flip_sprite_combat(current_cell, target_enemy.current_cell)
-		play_animation("Attack")
-		target_enemy.current_health_points -= damage
-		if target_enemy.current_health_points <= 0:
-			target_enemy.state = State.DEAD
-		else:
-			target_enemy.state = State.HIT
-		target_enemy.update_healthbar(target_enemy)
-		await animation_player.animation_finished
-		print(target_enemy.current_health_points)
-		end_turn()
-
-
+		update_healthbar(self)
+		state = State.HIT
 
 func move():
 	current_cell = get_my_current_cell()
@@ -185,7 +219,7 @@ func move_along_path(delta):
 
 
 func end_turn():
-	print("I am ", self, " and I am ending my TURN!")
+	print("I am ", self, " at: ", current_cell, "and I am ending my TURN!")
 	state = State.IDLE
 	set_active(false)
 	emit_signal("turn_finished")
@@ -226,9 +260,15 @@ func initiliaze_variables():
 	current_timeunits = timeunits
 	update_healthbar(self)
 	update_TU_bar(self)
+	queue_redraw()
 
 
 func pay_movement_cost_and_update_path() -> Array[Vector2i]:
+	if active_path.size() <= 1:
+		print("UNIT: NO PATH FOUND!!!")
+		current_timeunits -= actions["wait"]
+		update_TU_bar(self)
+		return []
 #?#	print_if_active(["timeunits: ", current_timeunits])
 	var cells_to_move = min(current_timeunits / actions["move"], active_path.size() -1) # -1 to exclude current_cell (???)
 #?#	print_if_active(["Cells to move: ", cells_to_move])
@@ -242,6 +282,9 @@ func pay_movement_cost_and_update_path() -> Array[Vector2i]:
 
 func refill_timeunits():
 	current_timeunits = timeunits
+	update_TU_bar(self)
+
+
 func is_enemy_near() -> bool:
 	return navigation_grid.get_adjacent_units(self, group).size() > 0
 func is_alive_enemy_near() -> bool:
