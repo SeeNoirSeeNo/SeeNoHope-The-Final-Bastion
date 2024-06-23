@@ -3,8 +3,8 @@ extends Node
 class_name Timeline
 
 var timeline : Array = [] #List of all units
-#var current_unit : Node = null #The unit who's turn it is
 var current_unit : Unit = null #The unit who's turn it is
+
 
 func add_unit(unit : Node) -> void:
 #	print("Adding unit to timeline: ", unit.unit_type)
@@ -13,12 +13,16 @@ func add_unit(unit : Node) -> void:
 #	print("Current timeline: ", timeline)
 	
 func _on_unit_created(unit):
-#	print("Unit created: ", unit.unit_type)	
 	add_unit(unit)
 
+func _on_unit_died(unit):
+	timeline.erase(unit)
+	timeline.sort_custom(compare_timeunits)
+#?#	print("Timeline: I ERASED UNIT FROM TIMELINE: ", unit)
 
+	
 func start_turn() -> void:
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(0.01).timeout
 	if timeline.size() > 0:
 		if current_unit != null:
 			current_unit.set_active(false)
@@ -34,6 +38,8 @@ func _on_turn_finished():
 func end_turn() -> void:
 	print("Ending turn for unit: ", current_unit.unit_type, "\n")
 	if all_units_done_for_round():
+		if current_unit != null:
+			timeline.append(current_unit)
 		print("All units done for the round. Starting new round.")
 		start_new_round()
 	else:
@@ -44,17 +50,27 @@ func end_turn() -> void:
 			for unit in timeline:
 				var tu = unit.current_timeunits
 #?#				print(unit, "My Time units: ", tu)
-#?#			print("Current timeline AFTER custom sorting: ", timeline)
+			print("Current timeline AFTER custom sorting: ", timeline)
 			current_unit = null
 		start_turn()
 
 
-
 func compare_timeunits(unit1 : Unit, unit2 : Unit) -> bool:
-	if unit1.current_timeunits > unit2.current_timeunits:
-		return true
-	else:
-		return false
+	# First, prioritize units that are not done for the round
+	if unit1.is_done_for_the_round and not unit2.is_done_for_the_round:
+		return false  # unit2 should come before unit1
+	elif not unit1.is_done_for_the_round and unit2.is_done_for_the_round:
+		return true  # unit1 should come before unit2
+	
+	# If both units have the same done status, compare based on current_timeunits
+	return unit1.current_timeunits > unit2.current_timeunits
+
+###OLD###
+#func compare_timeunits(unit1 : Unit, unit2 : Unit) -> bool:
+#	if unit1.current_timeunits > unit2.current_timeunits:
+#		return true
+#	else:
+#		return false
 
 
 func print_timeunits(timeline : Array) -> void:
@@ -73,3 +89,4 @@ func start_new_round() -> void:
 	for unit in timeline:
 		unit.is_done_for_the_round = false
 		unit.refill_timeunits()
+	start_turn()

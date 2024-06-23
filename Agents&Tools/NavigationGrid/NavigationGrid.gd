@@ -23,8 +23,17 @@ func _process(delta):
 		var current_mouse_grid_position = get_cell(get_global_mouse_position())
 		if current_mouse_grid_position != previous_mouse_grid_position:
 			previous_mouse_grid_position = current_mouse_grid_position
-			print(current_mouse_grid_position)
+			print(current_mouse_grid_position, astar.is_point_solid(current_mouse_grid_position))
 
+func _on_unit_died(unit):
+#?#	print("Navigation_Grid: Unit-Dict before Erase: ", units)
+	erase_unit_from_dict(unit)
+#?#	print("Navigation_Grid: Unit-Dict after Erase: ", units)
+	set_cells_solid_state(unit.current_cell, false)
+#?#	print("Dying units cell: ", unit.current_cell)
+#?#	print("occupied_cells: ", occupied_cells)
+	await get_tree().process_frame
+	redraw_grid()
 
 func erase_unit_from_dict(unit):
 	if units.has(unit.current_cell):
@@ -34,7 +43,7 @@ func erase_unit_from_dict(unit):
 
 func add_unit_to_dict(unit):
 	units[unit.current_cell] = unit 
-	print("NavigationGrid: UnitDict after unit walking_to_new_cell: ", units)
+#?#	print("NavigationGrid: UnitDict after unit walking_to_new_cell: ", units)
 
 
 #Sets a cells SOLID attribute to TRUE or FALSE
@@ -50,6 +59,7 @@ func set_cells_solid_state(cell, state):
 		if occupied_cells.has(cell):
 			occupied_cells.erase(cell)
 
+	
 func redraw_grid():
 	queue_redraw()
 
