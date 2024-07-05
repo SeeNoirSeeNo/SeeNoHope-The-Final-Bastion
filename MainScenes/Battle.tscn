@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://bir852iq3v7sq"]
+[gd_scene load_steps=9 format=3 uid="uid://bir852iq3v7sq"]
 
 [ext_resource type="Script" path="res://MainScenes/Battle.gd" id="1_wgiy2"]
 [ext_resource type="PackedScene" uid="uid://duelxmv41oxw4" path="res://Agents&Tools/MapPicker/MapPicker.tscn" id="2_efjwm"]
+[ext_resource type="AudioStream" uid="uid://dkcn1wtkdrxet" path="res://BattleMaps/Caves/DarkCaveAmbiente.wav" id="2_qi30o"]
 [ext_resource type="PackedScene" uid="uid://jjnqrs3wk47o" path="res://Agents&Tools/NavigationGrid/NavigationGrid.tscn" id="3_5pxlv"]
 [ext_resource type="PackedScene" uid="uid://ctvbsbyvjp67g" path="res://Agents&Tools/NavigationGrid/path_indicator.tscn" id="4_drxas"]
 [ext_resource type="PackedScene" uid="uid://cm2c1w55mxnuw" path="res://Agents&Tools/UnitFactory/UnitFactory.tscn" id="5_t8cve"]
@@ -10,6 +11,7 @@
 
 [node name="Battle" type="Node"]
 script = ExtResource("1_wgiy2")
+music = ExtResource("2_qi30o")
 
 [node name="Map" type="Node" parent="."]
 

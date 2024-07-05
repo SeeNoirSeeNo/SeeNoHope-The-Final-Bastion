@@ -22,7 +22,7 @@ func _on_unit_died(unit):
 
 	
 func start_turn() -> void:
-	await get_tree().create_timer(0.01).timeout
+	await get_tree().create_timer(0.11).timeout
 	if timeline.size() > 0:
 		if current_unit != null:
 			current_unit.set_active(false)

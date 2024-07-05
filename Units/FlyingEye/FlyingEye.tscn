@@ -1,10 +1,14 @@
-[gd_scene load_steps=21 format=3 uid="uid://d3rt8bsn4p76c"]
+[gd_scene load_steps=25 format=3 uid="uid://d3rt8bsn4p76c"]
 
 [ext_resource type="Script" path="res://Units/FlyingEye/FlyingEye.gd" id="1_4nd0p"]
 [ext_resource type="Texture2D" uid="uid://idak3dqujfmc" path="res://Units/FlyingEye/Flight.png" id="1_8cbkt"]
+[ext_resource type="AudioStream" uid="uid://e6gs5eqbi5w" path="res://Units/FlyingEye/FlyingEyeBite.wav" id="2_777lj"]
+[ext_resource type="AudioStream" uid="uid://bro3yxl4jrbpq" path="res://Units/FlyingEye/BatWings.mp3" id="2_ed1lr"]
 [ext_resource type="Texture2D" uid="uid://bgsflbqqxf8hw" path="res://Units/FlyingEye/Attack.png" id="2_mubhx"]
 [ext_resource type="Texture2D" uid="uid://cy0qbe5v11ejp" path="res://Units/FlyingEye/Attack2.png" id="3_pqdta"]
+[ext_resource type="AudioStream" uid="uid://46523xqhjq2" path="res://Units/FlyingEye/FlyingEyeDeathSound.mp3" id="4_4imtt"]
 [ext_resource type="Texture2D" uid="uid://d0t3tr2ucbtad" path="res://Units/FlyingEye/Attack3.png" id="4_xxgsb"]
+[ext_resource type="AudioStream" uid="uid://d1wvycgft2w5o" path="res://Units/FlyingEye/FlyingEyeHit.wav" id="5_2lfpl"]
 [ext_resource type="Texture2D" uid="uid://by70e5f0axaqc" path="res://Units/FlyingEye/Death.png" id="5_7eiku"]
 [ext_resource type="Texture2D" uid="uid://uik46fhpo7lp" path="res://Units/FlyingEye/projectile_sprite.png" id="6_61831"]
 [ext_resource type="Texture2D" uid="uid://cd5nirbyl5b46" path="res://Units/FlyingEye/Take Hit.png" id="7_mwwga"]
@@ -349,9 +353,13 @@ _data = {
 [node name="FlyingEye" type="CharacterBody2D"]
 script = ExtResource("1_4nd0p")
 unit_type = "Flying Eye"
-speed = 450
+speed = 150
 timeunits = 80
 damage = 40
+move_sound = ExtResource("2_ed1lr")
+attack_sound = ExtResource("2_777lj")
+death_sound = ExtResource("4_4imtt")
+hit_sound = ExtResource("5_2lfpl")
 health_points = 66
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

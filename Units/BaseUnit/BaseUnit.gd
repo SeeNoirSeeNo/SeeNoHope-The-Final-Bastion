@@ -1,7 +1,6 @@
 extends CharacterBody2D
 
 class_name Unit
-
 ### SIGNALS ###
 signal turn_finished()
 signal movement_finished()
@@ -13,6 +12,10 @@ enum State {IDLE, MOVING, ATTACKING, HIT, DEAD, TURN_FINISHED, ROUND_FINISHED}
 @export var speed : int
 @export var timeunits : int
 @export var damage : int
+@export var move_sound : AudioStream
+@export var attack_sound : AudioStream
+@export var death_sound : AudioStream
+@export var hit_sound : AudioStream
 ### @ONREADY ###
 @onready var map = $"../../../Map".get_child(0)
 @onready var navigation_grid : NavigationGrid = $"../../../Agents/NavigationGrid"
@@ -53,6 +56,7 @@ func _process(delta):
 		move_along_path(delta)
 
 
+
 	if state == State.IDLE:
 		play_animation("Idle")
 		
@@ -65,6 +69,7 @@ func _process(delta):
 		if is_dead == false:
 			is_dead = true
 			play_animation("Death")
+			Audioplayer.play_sound(death_sound)
 			emit_signal("unit_died", self)
 			await animation_player.animation_finished
 			healthbar.hide()
@@ -83,6 +88,7 @@ func attack():
 		var target_enemy : Unit = alive_enemies.pick_random()
 		flip_sprite_combat(current_cell, target_enemy.current_cell)
 		play_animation("Attack")
+		Audioplayer.play_sound(attack_sound)
 		pay_attack_cost()
 		deal_damage(target_enemy, damage)
 		await animation_player.animation_finished
@@ -165,6 +171,7 @@ func take_damage(damage):
 		current_health_points = 0
 		state = State.DEAD
 	else:
+		Audioplayer.play_sound(hit_sound)
 		update_healthbar(self)
 		state = State.HIT
 
@@ -174,6 +181,7 @@ func move():
 	var destination = get_destination()
 	active_path = get_path_to_destination(current_cell, destination)
 	active_path = pay_movement_cost_and_update_path()
+	Audioplayer.play_looped_sound(move_sound)
 	update_path_line()
 
 
@@ -207,6 +215,7 @@ func move_along_path(delta):
 		flip_sprite(current_cell, active_path.front()) #Works, but I don't have a good feeling about it
 	navigation_grid.set_cells_solid_state(current_cell, false)
 
+
 	global_position = global_position.move_toward(map.map_to_local(next_cell), speed * delta)
 	navigation_grid.erase_unit_from_dict(self)
 	
@@ -222,6 +231,7 @@ func end_turn():
 	print("I am ", self, " at: ", current_cell, "and I am ending my TURN!")
 	state = State.IDLE
 	set_active(false)
+	Audioplayer.stop_sound()
 	emit_signal("turn_finished")
 
 func end_round():
