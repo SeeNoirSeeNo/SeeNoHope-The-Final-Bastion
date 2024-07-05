@@ -15,6 +15,10 @@ run/main_scene="res://MainScenes/Battle.tscn"
 config/features=PackedStringArray("4.1", "GL Compatibility")
 config/icon="res://Units/BaseUnit/icon.svg"
 
+[autoload]
+
+Audioplayer="*res://Agents&Tools/AudioPlayer/audioplayer.tscn"
+
 [input]
 
 move={

@@ -2,6 +2,7 @@ extends Node
 
 ### SIGNALS ###
 ### @EXPORT ###
+@export var music : AudioStream
 ### @ONREADY ###
 @onready var map_picker = $Agents/MapPicker
 @onready var navigation_grid : NavigationGrid = $Agents/NavigationGrid
@@ -21,7 +22,7 @@ func _ready():
 	unit_factory.create_unit("FlyingEye", Vector2i(17,8), "Enemy", "Enemy", true)
 	unit_factory.create_unit("BananaMan", Vector2i(15,3), "Enemy", "Enemy", true)
 	unit_factory.create_unit("FlyingEye", Vector2i(17,3), "Enemy", "Enemy", true)
-
+	Audioplayer.play_music(music)
 	
 	await get_tree().create_timer(1).timeout #wait a second 
 	timeline.start_turn()
