@@ -1,56 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://thtbjwr0srd5"]
 
-[sub_resource type="GDScript" id="GDScript_77wo7"]
-script/source = "extends Node2D
-
-
-### SIGNALS ###
-signal sound_finished(audio_player)
-### ENUMS ###
-### @EXPORT ###
-### @ONREADY ###
-@onready var looped = $looped
-@onready var music = $Music
-### VARIABLES ###
-var audio_player_pool : Array = []
-
-func _ready():
-	for i in range(10): #CREATE 10 ASP's
-		var audio_player = AudioStreamPlayer.new()
-		add_child(audio_player)
-		audio_player_pool.append(audio_player)
-
-func play_sound(sound: AudioStream) -> void:
-	var player = audio_player_pool.pop_front() #Pick the first free ASP
-	if sound != null:
-		player.stream = sound
-		player.play()
-		player.finished.connect(_on_sound_finished.bind(player))
-
-
-func _on_sound_finished(player):
-	player.finished.disconnect(_on_sound_finished.bind(player))
-	player.stop()
-	audio_player_pool.append(player)
-
-func play_looped_sound(sound: AudioStream) -> void:
-	if sound != null:
-		looped.stream = sound
-		looped.play()
-func stop_sound() -> void:
-	looped.stop()
-
-
-func play_music(sound: AudioStream) -> void:
-	if sound != null:
-		music.stream = sound
-		music.play()
-func stop_music() -> void:
-	music.stop()
-"
+[ext_resource type="Script" path="res://Agents&Tools/AudioPlayer/audioplayer.gd" id="1_onu1n"]
 
 [node name="Audioplayer" type="Node2D"]
-script = SubResource("GDScript_77wo7")
+script = ExtResource("1_onu1n")
 
 [node name="looped" type="AudioStreamPlayer" parent="."]
 

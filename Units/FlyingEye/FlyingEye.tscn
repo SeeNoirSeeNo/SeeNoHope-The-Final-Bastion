@@ -353,7 +353,7 @@ _data = {
 [node name="FlyingEye" type="CharacterBody2D"]
 script = ExtResource("1_4nd0p")
 unit_type = "Flying Eye"
-speed = 150
+speed = 300
 timeunits = 80
 damage = 40
 move_sound = ExtResource("2_ed1lr")

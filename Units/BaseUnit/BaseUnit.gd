@@ -54,17 +54,12 @@ func _process(delta):
 	if state == State.MOVING:
 		play_animation("Run")
 		move_along_path(delta)
-
-
-
 	if state == State.IDLE:
 		play_animation("Idle")
-		
 	if state == State.HIT:
 		play_animation("TakeHit")
 		await animation_player.animation_finished
 		state = State.IDLE
-
 	if state == State.DEAD:
 		if is_dead == false:
 			is_dead = true
@@ -172,6 +167,7 @@ func take_damage(damage):
 		state = State.DEAD
 	else:
 		Audioplayer.play_sound(hit_sound)
+		print("\nI am Unit: ", str(self), " And I play my hit sound: ", str(hit_sound), "\n")
 		update_healthbar(self)
 		state = State.HIT
 
@@ -228,14 +224,14 @@ func move_along_path(delta):
 
 
 func end_turn():
-	print("I am ", self, " at: ", current_cell, "and I am ending my TURN!")
+#?#	print("I am ", self, " at: ", current_cell, "and I am ending my TURN!")
 	state = State.IDLE
 	set_active(false)
 	Audioplayer.stop_sound()
 	emit_signal("turn_finished")
 
 func end_round():
-	print("I am ", self, " and I am ending my ROUND!")
+#?#	print("I am ", self, " and I am ending my ROUND!")
 	state = State.ROUND_FINISHED
 	set_active(false)
 	emit_signal("turn_finished")
@@ -283,7 +279,7 @@ func pay_movement_cost_and_update_path() -> Array[Vector2i]:
 	var cells_to_move = min(current_timeunits / actions["move"], active_path.size() -1) # -1 to exclude current_cell (???)
 #?#	print_if_active(["Cells to move: ", cells_to_move])
 	current_timeunits -= cells_to_move * actions["move"]
-	print_if_active(["Current time units after paying for movement: ", current_timeunits])
+#?#	print_if_active(["Current time units after paying for movement: ", current_timeunits])
 	var path = active_path.slice(0, int(cells_to_move) +1) # +1 because we count the first cell as well (???)
 #?#	print_if_active(["My Active Path after paying for movement: ", path])
 	update_TU_bar(self)

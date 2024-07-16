@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=3 uid="uid://c3tc28a0qxxdy"]
+
+[ext_resource type="Script" path="res://Graphics & UI/Battle_UI/battle_ui.gd" id="1_3etos"]
+[ext_resource type="PackedScene" uid="uid://vcvi408es4ox" path="res://Graphics & UI/NextRound/next_round.tscn" id="1_dm4j5"]
+[ext_resource type="AudioStream" uid="uid://dfbtct7t2i0pr" path="res://Graphics & UI/Battle_UI/Wooosh.wav" id="2_kg1pj"]
+
+[node name="Battle_UI" type="CanvasLayer"]
+script = ExtResource("1_3etos")
+next_round_sound = ExtResource("2_kg1pj")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="NextRound" parent="Control" instance=ExtResource("1_dm4j5")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -131.5
+offset_top = -20.0
+offset_right = 131.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 24
+theme_override_font_sizes/italics_font_size = 24
+theme_override_font_sizes/bold_italics_font_size = 24
+theme_override_font_sizes/mono_font_size = 24
+bbcode_enabled = true
+text = "asdpj sadj poasd koasdkpo asdpo "
+autowrap_mode = 0
