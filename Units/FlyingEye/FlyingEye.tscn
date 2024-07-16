@@ -360,6 +360,7 @@ move_sound = ExtResource("2_ed1lr")
 attack_sound = ExtResource("2_777lj")
 death_sound = ExtResource("4_4imtt")
 hit_sound = ExtResource("5_2lfpl")
+damage_color = Color(0.556863, 0, 0, 1)
 health_points = 66
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

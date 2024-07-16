@@ -36,6 +36,7 @@ var is_dead = false
 var current_timeunits : int
 var is_done_for_the_round : bool = false
 
+@export var damage_color : Color
 @export var health_points : int
 var current_health_points : int
 
@@ -161,6 +162,7 @@ func deal_damage(target, dmg):
 		target.take_damage(dmg)
 
 func take_damage(damage):
+	healthbar.showFloatingLabel(damage, damage_color)
 	current_health_points -= damage
 	if current_health_points <= 0:
 		current_health_points = 0

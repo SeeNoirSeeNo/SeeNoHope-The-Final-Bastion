@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cxnfg7i60h8eq"]
+[gd_scene load_steps=6 format=3 uid="uid://cxnfg7i60h8eq"]
 
 [ext_resource type="Texture2D" uid="uid://dgqpjgqelq22r" path="res://Graphics & UI/Healthbar/enemy_health_bar_background_001.png" id="1_nxmih"]
 [ext_resource type="Texture2D" uid="uid://bdou4d2ow2mvm" path="res://Graphics & UI/Healthbar/enemy_health_bar_foreground_003.png" id="2_ud4ch"]
 [ext_resource type="Texture2D" uid="uid://cbng8gacteshv" path="res://Graphics & UI/Healthbar/enemy_health_bar_001.png" id="3_yvq6c"]
 [ext_resource type="Script" path="res://Graphics & UI/Healthbar/healthbar.gd" id="4_mxboh"]
+[ext_resource type="PackedScene" uid="uid://bw15fv13j3txp" path="res://Graphics & UI/FloatingLabel/FloatingLabel.tscn" id="5_6ddd0"]
 
 [node name="Healthbar" type="TextureProgressBar"]
 offset_left = -13.0
@@ -25,3 +26,10 @@ offset_bottom = 26.0
 text = "200"
 horizontal_alignment = 1
 vertical_alignment = 2
+
+[node name="FloatingLabel" parent="." instance=ExtResource("5_6ddd0")]
+layout_mode = 0
+offset_left = 9.85211
+offset_top = 128.077
+offset_right = 205.852
+offset_bottom = 263.077
