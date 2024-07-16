@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bir852iq3v7sq"]
+[gd_scene load_steps=10 format=3 uid="uid://bir852iq3v7sq"]
 
 [ext_resource type="Script" path="res://MainScenes/Battle.gd" id="1_wgiy2"]
 [ext_resource type="PackedScene" uid="uid://duelxmv41oxw4" path="res://Agents&Tools/MapPicker/MapPicker.tscn" id="2_efjwm"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cm2c1w55mxnuw" path="res://Agents&Tools/UnitFactory/UnitFactory.tscn" id="5_t8cve"]
 [ext_resource type="Script" path="res://MainScenes/Camera2D.gd" id="6_msmka"]
 [ext_resource type="Script" path="res://Agents&Tools/Timeline/Timeline.gd" id="6_t15fm"]
+[ext_resource type="PackedScene" uid="uid://c3tc28a0qxxdy" path="res://Graphics & UI/Battle_UI/battle_ui.tscn" id="9_y0wmg"]
 
 [node name="Battle" type="Node"]
 script = ExtResource("1_wgiy2")
@@ -39,3 +40,5 @@ script = ExtResource("6_t15fm")
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(576, 325)
 script = ExtResource("6_msmka")
+
+[node name="Battle_UI" parent="." instance=ExtResource("9_y0wmg")]

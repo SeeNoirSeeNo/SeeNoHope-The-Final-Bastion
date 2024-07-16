@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://vcvi408es4ox"]
+
+[node name="NextRound" type="RichTextLabel"]
+offset_right = 40.0
+offset_bottom = 40.0
+fit_content = true
