@@ -399,13 +399,17 @@ script = ExtResource("1_t1e8x")
 unit_type = "Cave Goblin"
 speed = 300
 timeunits = 125
-damage = 15
 move_sound = ExtResource("2_hfv0q")
 attack_sound = ExtResource("2_ovvph")
 death_sound = ExtResource("2_fh3to")
 hit_sound = ExtResource("5_e4aa6")
 damage_color = Color(0.741176, 0, 0, 1)
 health_points = 150
+base_min_damage = 22
+base_max_damage = 27
+move_cost = 18
+attack_cost = 28
+wait_cost = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2pi0q")
@@ -418,10 +422,10 @@ hframes = 8
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Sprite2D")
-autoplay = "Idle"
 libraries = {
 "": SubResource("AnimationLibrary_elxut")
 }
+autoplay = "Idle"
 
 [node name="Healthbar" parent="." instance=ExtResource("11_tnxfd")]
 offset_top = -25.0

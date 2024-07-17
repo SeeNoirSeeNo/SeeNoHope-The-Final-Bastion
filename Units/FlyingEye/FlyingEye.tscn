@@ -201,7 +201,7 @@ tracks/1/path = NodePath(".:hframes")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.0873377),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [8]
@@ -355,13 +355,17 @@ script = ExtResource("1_4nd0p")
 unit_type = "Flying Eye"
 speed = 300
 timeunits = 80
-damage = 40
 move_sound = ExtResource("2_ed1lr")
 attack_sound = ExtResource("2_777lj")
 death_sound = ExtResource("4_4imtt")
 hit_sound = ExtResource("5_2lfpl")
 damage_color = Color(0.556863, 0, 0, 1)
 health_points = 66
+base_min_damage = 12
+base_max_damage = 20
+move_cost = 15
+attack_cost = 25
+wait_cost = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2pi0q")
@@ -374,10 +378,10 @@ hframes = 8
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Sprite2D")
-autoplay = "Idle"
 libraries = {
 "": SubResource("AnimationLibrary_elxut")
 }
+autoplay = "Idle"
 
 [node name="Healthbar" parent="." instance=ExtResource("9_3fqap")]
 offset_top = -18.0

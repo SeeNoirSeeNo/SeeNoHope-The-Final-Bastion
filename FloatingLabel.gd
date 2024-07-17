@@ -4,29 +4,18 @@ var moving = false
 var speed_x = 0
 var speed_y = 0
 
-var starting_position = global_position
-
-
-func _process(delta):
-	if moving:
-		global_position.x += speed_x
-		global_position.y += speed_y
-
-func showFloatingLabel(value, color, x_speed, y_speed, duration):
-	moveFloatingLabel(x_speed, y_speed, duration)
+func start_floating_label(value, color, velocity, duration):
+	var tween = create_tween()
+	tween.tween_property(self, "global_position", global_position + velocity, duration)
 	text = str(value)
 	self_modulate = color
 	show()
+	var timer = Timer.new()
+	add_child(timer)
+	timer.wait_time = duration
+	timer.one_shot = true
+	timer.timeout.connect(self._on_timer_timeout)
+	timer.start()
 
-func hideFloatingLabel():
-	hide()
-	global_position = starting_position
-
-func moveFloatingLabel(new_speed_x, new_speed_y, duration):
-	if not moving:
-		moving = true
-		speed_x = new_speed_x
-		speed_y = new_speed_y
-		await get_tree().create_timer(duration).timeout
-		hideFloatingLabel()
-		moving = false
+func _on_timer_timeout():
+	queue_free()
