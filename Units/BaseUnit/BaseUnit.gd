@@ -11,11 +11,18 @@ enum State {IDLE, MOVING, ATTACKING, HIT, DEAD, TURN_FINISHED, ROUND_FINISHED}
 @export var unit_type : String
 @export var speed : int
 @export var timeunits : int
-@export var damage : int
 @export var move_sound : AudioStream
 @export var attack_sound : AudioStream
 @export var death_sound : AudioStream
 @export var hit_sound : AudioStream
+@export var damage_color : Color
+@export var health_points : int
+@export var base_min_damage : int
+@export var base_max_damage : int
+@export var move_cost : int
+@export var attack_cost : int
+@export var wait_cost : int
+@export var attack_range : int = 1
 ### @ONREADY ###
 @onready var map = $"../../../Map".get_child(0)
 @onready var navigation_grid : NavigationGrid = $"../../../Agents/NavigationGrid"
@@ -28,6 +35,8 @@ enum State {IDLE, MOVING, ATTACKING, HIT, DEAD, TURN_FINISHED, ROUND_FINISHED}
 
 
 ### VARIABLES ###
+
+var actions : Dictionary
 var active_path: Array[Vector2i]
 var current_cell : Vector2i
 var adjacent_cells : Dictionary
@@ -35,15 +44,12 @@ var state = State.IDLE
 var is_dead = false
 var current_timeunits : int
 var is_done_for_the_round : bool = false
-
-@export var damage_color : Color
-@export var health_points : int
+var min_damage
+var max_damage
+var label_velocity: Vector2 = Vector2(8,-20)
+var label_duration: float = 0.8
 var current_health_points : int
-
-var attack_range : int = 1
-var actions : Dictionary = { "move" : 10, "attack" : 40, "wait" : 5}
 var group : String
-
 var is_active : bool = false
 
 ### FUNCTIONS ###
@@ -86,10 +92,13 @@ func attack():
 		play_animation("Attack")
 		Audioplayer.play_sound(attack_sound)
 		pay_attack_cost()
-		deal_damage(target_enemy, damage)
+		deal_damage(target_enemy, roll_damage())
 		await animation_player.animation_finished
 		end_turn()
 
+func roll_damage() -> int:
+	return randi_range(min_damage, max_damage)
+	
 func pay_wait_cost():
 	current_timeunits -= actions["wait"]
 	update_TU_bar(self)
@@ -162,7 +171,7 @@ func deal_damage(target, dmg):
 		target.take_damage(dmg)
 
 func take_damage(damage):
-	healthbar.showFloatingLabel(damage, damage_color)
+	healthbar.create_floating_label(damage, damage_color, label_velocity, label_duration) #last 2 param make me unhappy
 	current_health_points -= damage
 	if current_health_points <= 0:
 		current_health_points = 0
@@ -269,6 +278,15 @@ func initiliaze_variables():
 	update_healthbar(self)
 	update_TU_bar(self)
 	queue_redraw()
+	#Set Damage
+	min_damage = base_min_damage
+	max_damage = base_max_damage
+	#Populate Actions Dict
+	actions = {
+		"move": move_cost,
+		"attack": attack_cost,
+		"wait": wait_cost,
+	}
 
 
 func pay_movement_cost_and_update_path() -> Array[Vector2i]:

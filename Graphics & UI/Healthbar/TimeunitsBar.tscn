@@ -6,11 +6,12 @@
 [ext_resource type="Script" path="res://Graphics & UI/Healthbar/TimeunitsBar.gd" id="4_aauhg"]
 
 [node name="TimeunitsBar" type="TextureProgressBar"]
-offset_left = -13.0
+z_index = 5
+offset_left = -21.0
 offset_top = -2.0
-offset_right = 243.0
+offset_right = 235.0
 offset_bottom = 30.0
-scale = Vector2(0.101501, 0.101501)
+scale = Vector2(0.152, 0.152)
 value = 66.0
 texture_under = ExtResource("1_jem5j")
 texture_over = ExtResource("2_jg5yr")
