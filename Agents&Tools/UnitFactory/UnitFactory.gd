@@ -68,10 +68,30 @@ func match_parent(parent) -> Node:
 func _on_map_loaded(_map_name):
 	tile_map = map.get_child(0)
 	
-#func _input(event):
-#	if event.is_action_pressed("unit"):
-#		spawn_unit()
+func _input(event):
+	if event.is_action_pressed("unit"):
+		spawn_random_unit(2)
 
+
+
+func spawn_random_unit(round):
+	var type = possible_units[randi() % possible_units.size()] # Pick a random unit type
+	print("UnitFactory: type = ", type)
+	var position = navigation_grid.free_cells.pick_random() # Pick a random free cell
+	print("UnitFactory: position = ", position)
+	var parent
+	var group
+	if round % 2 == 0:
+		parent = "Enemy"
+		group = "Enemy"
+	else:
+		parent = "Player"
+		group = "Player"
+	create_unit(type, position, parent, group, true)
+
+func _on_round_finished(round):
+	spawn_random_unit(round)
+	
 #func spawn_unit():
 #	var type = possible_units[randi() % possible_units.size()] # Choose a random unit type
 #	print("UnitFactory: type = ", type)
