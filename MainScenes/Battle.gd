@@ -24,7 +24,8 @@ func _ready():
 	unit_factory.create_unit("CaveGoblin", Vector2i(3,12), "Enemy", "Enemy", true)
 	unit_factory.create_unit("FlyingEye", Vector2i(4,18), "Enemy", "Enemy", true)
 	unit_factory.create_unit("BananaMan", Vector2i(5,18), "Enemy", "Enemy", true)
-
+	unit_factory.create_unit("Necromancer", Vector2i(6,18), "Enemy", "Enemy", true)
+	
 	Audioplayer.play_music(music)
 	
 	await get_tree().create_timer(1).timeout #wait a second 
