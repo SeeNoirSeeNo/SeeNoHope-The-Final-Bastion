@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://cem2us2b5a6b6"]
+
+[ext_resource type="Script" path="res://Graphics & UI/Battle_UI/TimeLineBar.gd" id="1_mnror"]
+
+[node name="TimeLineBar" type="ProgressBar"]
+self_modulate = Color(1, 0.462745, 1, 1)
+offset_right = 160.0
+offset_bottom = 37.0
+value = 100.0
+fill_mode = 1
+script = ExtResource("1_mnror")

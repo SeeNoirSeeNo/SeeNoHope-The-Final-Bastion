@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://c3tc28a0qxxdy"]
+[gd_scene load_steps=6 format=3 uid="uid://c3tc28a0qxxdy"]
 
 [ext_resource type="Script" path="res://Graphics & UI/Battle_UI/battle_ui.gd" id="1_3etos"]
 [ext_resource type="PackedScene" uid="uid://vcvi408es4ox" path="res://Graphics & UI/NextRound/next_round.tscn" id="1_dm4j5"]
 [ext_resource type="AudioStream" uid="uid://dfbtct7t2i0pr" path="res://Graphics & UI/Battle_UI/Wooosh.wav" id="2_kg1pj"]
+[ext_resource type="PackedScene" uid="uid://car60c06y40c" path="res://Graphics & UI/Healthbar/Timelinebar.tscn" id="4_bpllq"]
+[ext_resource type="PackedScene" uid="uid://bthwnu1ep3dkc" path="res://Graphics & UI/Healthbar/PredictionBar.tscn" id="5_5aiwx"]
 
 [node name="Battle_UI" type="CanvasLayer"]
 script = ExtResource("1_3etos")
@@ -37,3 +39,16 @@ theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
 text = "asdpj sadj poasd koasdkpo asdpo "
 autowrap_mode = 0
+
+[node name="TimeLineBar" parent="Control" instance=ExtResource("4_bpllq")]
+layout_mode = 0
+offset_left = 1120.0
+offset_top = 385.0
+offset_right = 1376.0
+offset_bottom = 417.0
+
+[node name="PredictionBar" parent="Control" instance=ExtResource("5_5aiwx")]
+offset_left = 1038.0
+offset_top = 381.0
+offset_right = 1294.0
+offset_bottom = 413.0

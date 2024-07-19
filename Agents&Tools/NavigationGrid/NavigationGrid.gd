@@ -18,7 +18,7 @@ var previous_mouse_grid_position : Vector2i
 var draw_circles = false
 
 
-func _process(delta):
+func _process(_delta):
 	if draw_circles:
 		var current_mouse_grid_position = get_cell(get_global_mouse_position())
 		if current_mouse_grid_position != previous_mouse_grid_position:
