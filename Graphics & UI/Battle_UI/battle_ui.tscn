@@ -12,21 +12,34 @@ next_round_sound = ExtResource("2_kg1pj")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 1152.0
-offset_bottom = 648.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TimeLineBar" parent="Control/HBoxContainer" instance=ExtResource("4_bpllq")]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="PredictionBar" parent="Control/HBoxContainer" instance=ExtResource("5_5aiwx")]
+layout_mode = 2
+size_flags_horizontal = 2
 
 [node name="NextRound" parent="Control" instance=ExtResource("1_dm4j5")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -131.5
-offset_top = -20.0
-offset_right = 131.5
-offset_bottom = 20.0
+layout_mode = 2
+offset_left = 444.5
+offset_top = 304.0
+offset_right = 643.5
+offset_bottom = 952.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -37,18 +50,5 @@ theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/bold_italics_font_size = 24
 theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
-text = "asdpj sadj poasd koasdkpo asdpo "
+text = "NEXT ROUND: XX"
 autowrap_mode = 0
-
-[node name="TimeLineBar" parent="Control" instance=ExtResource("4_bpllq")]
-layout_mode = 0
-offset_left = 1120.0
-offset_top = 385.0
-offset_right = 1376.0
-offset_bottom = 417.0
-
-[node name="PredictionBar" parent="Control" instance=ExtResource("5_5aiwx")]
-offset_left = 1038.0
-offset_top = 381.0
-offset_right = 1294.0
-offset_bottom = 413.0

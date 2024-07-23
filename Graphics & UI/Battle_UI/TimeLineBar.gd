@@ -1,4 +1,5 @@
 extends TextureProgressBar
+@onready var value_label = $ValueLabel
 
 
 func _on_timeline_updated(timeline):
@@ -11,3 +12,4 @@ func _on_timeline_updated(timeline):
 	for unit in timeline:
 		combined_tu += unit.current_timeunits
 	value = combined_tu
+	value_label.text = str(combined_tu)

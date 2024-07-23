@@ -8,9 +8,11 @@ extends Node
 @onready var navigation_grid : NavigationGrid = $Agents/NavigationGrid
 @onready var unit_factory : UnitFactory = $Agents/UnitFactory
 @onready var timeline : Timeline = $Agents/Timeline
-@onready var timeline_bar = $Battle_UI/Control/TimeLineBar
-@onready var prediction_bar = $Battle_UI/Control/PredictionBar
+@onready var timeline_bar = $Battle_UI/Control/HBoxContainer/TimeLineBar
+@onready var prediction_bar = $Battle_UI/Control/HBoxContainer/PredictionBar
 @onready var battle_ui = $Battle_UI
+
+
 
 ### VARIABLES ###
 
@@ -21,12 +23,12 @@ func _ready():
 	map_picker.load_map() #Load a map (at random)
 
 	unit_factory.create_unit("CaveGoblin", Vector2i(17,3), "Player", "Player", true)
-#	unit_factory.create_unit("FlyingEye", Vector2i(18,5), "Player", "Player", true)
-#	unit_factory.create_unit("BananaMan", Vector2i(25,15), "Player", "Player", true)
+	unit_factory.create_unit("FlyingEye", Vector2i(18,5), "Player", "Player", true)
+	unit_factory.create_unit("BananaMan", Vector2i(25,15), "Player", "Player", true)
 	unit_factory.create_unit("CaveGoblin", Vector2i(3,12), "Enemy", "Enemy", true)
-#	unit_factory.create_unit("FlyingEye", Vector2i(4,18), "Enemy", "Enemy", true)
-#	unit_factory.create_unit("BananaMan", Vector2i(5,18), "Enemy", "Enemy", true)
-#	unit_factory.create_unit("Necromancer", Vector2i(6,18), "Enemy", "Enemy", true)
+	unit_factory.create_unit("FlyingEye", Vector2i(4,18), "Enemy", "Enemy", true)
+	unit_factory.create_unit("BananaMan", Vector2i(5,18), "Enemy", "Enemy", true)
+	unit_factory.create_unit("Necromancer", Vector2i(6,18), "Enemy", "Enemy", true)
 	
 	Audioplayer.play_music(music)
 	

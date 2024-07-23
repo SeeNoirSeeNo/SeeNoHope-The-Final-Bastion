@@ -157,6 +157,7 @@ func choose_action():
 		end_turn()
 	else:
 		### END ROUND ###
+		current_timeunits = 0
 		state = State.ROUND_FINISHED
 		is_done_for_the_round = true
 		end_round()
