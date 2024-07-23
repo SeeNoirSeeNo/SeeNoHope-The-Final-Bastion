@@ -15,7 +15,6 @@ enum State {IDLE, MOVING, ATTACKING, HIT, DEAD, TURN_FINISHED, ROUND_FINISHED}
 @export var attack_sound : AudioStream
 @export var death_sound : AudioStream
 @export var hit_sound : AudioStream
-@export var damage_color : Color
 @export var health_points : int
 @export var base_min_damage : int
 @export var base_max_damage : int
@@ -163,7 +162,8 @@ func choose_action():
 		end_round()
 
 
-
+func end_of_turn_action():
+	pass
 
 
 	
@@ -172,7 +172,7 @@ func deal_damage(target, dmg):
 		target.take_damage(dmg)
 
 func take_damage(damage):
-	healthbar.create_floating_label(damage, damage_color, label_velocity, label_duration) #last 2 param make me unhappy
+	healthbar.create_floating_label(damage, ColorAgent.damage_color, label_velocity, label_duration) #last 2 param make me unhappy
 	current_health_points -= damage
 	if current_health_points <= 0:
 		current_health_points = 0
@@ -282,13 +282,18 @@ func initiliaze_variables():
 	#Set Damage
 	min_damage = base_min_damage
 	max_damage = base_max_damage
-	#Populate Actions Dict
+	#Populate Actions Dict and make sure wait has the correct cost
 	actions = {
 		"move": move_cost,
 		"attack": attack_cost,
-		"wait": wait_cost,
 	}
-
+	var lowest_cost = INF #Find lowest cost among actions
+	for cost in actions.values():
+		if cost < lowest_cost:
+			lowest_cost = cost
+	wait_cost = lowest_cost - 1 #Substract 1 from it
+	actions["wait"] = wait_cost #New waiting cost
+	print(wait_cost)
 
 func pay_movement_cost_and_update_path() -> Array[Vector2i]:
 	if active_path.size() <= 1:
@@ -312,6 +317,7 @@ func refill_timeunits():
 	update_TU_bar(self)
 
 
+
 func is_enemy_near() -> bool:
 	return navigation_grid.get_adjacent_units(self, group).size() > 0
 func is_alive_enemy_near() -> bool:
@@ -326,10 +332,26 @@ func get_adjacent_cells():
 
 func update_path_line():
 	path_line.clear_points()
+	if 	self.group == "Player":
+		path_line.self_modulate = ColorAgent.player_color
+	else:
+		path_line.self_modulate = ColorAgent.enemy_color
 	for point in active_path:
 		path_line.add_point(map.map_to_local(point))
+
 
 func update_healthbar(caller):
 	healthbar.update(caller)
 func update_TU_bar(caller):
 	TU_bar.update(caller)
+
+
+
+### ABILITIES ###
+func self_heal(min, max):
+	var heal_amount = randi_range(min, max)
+	current_health_points += heal_amount
+	if current_health_points > health_points: #prevent over-healing
+		current_health_points = health_points
+	healthbar.create_floating_label(heal_amount, ColorAgent.heal_color, label_velocity, label_duration) #last 2 param make me unhappy
+	update_healthbar(self)

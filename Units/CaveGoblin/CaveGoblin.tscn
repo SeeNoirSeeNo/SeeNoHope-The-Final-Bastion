@@ -403,13 +403,13 @@ move_sound = ExtResource("2_hfv0q")
 attack_sound = ExtResource("2_ovvph")
 death_sound = ExtResource("2_fh3to")
 hit_sound = ExtResource("5_e4aa6")
-damage_color = Color(0.741176, 0, 0, 1)
 health_points = 150
 base_min_damage = 22
 base_max_damage = 27
 move_cost = 18
 attack_cost = 28
 wait_cost = 5
+attack_range = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2pi0q")

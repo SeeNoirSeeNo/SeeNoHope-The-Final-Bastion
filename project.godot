@@ -18,6 +18,7 @@ config/icon="res://Units/BaseUnit/icon.svg"
 [autoload]
 
 Audioplayer="*res://Agents&Tools/AudioPlayer/audioplayer.tscn"
+ColorAgent="*res://Agents&Tools/ColorAgent/ColorAgent.tscn"
 
 [input]
 

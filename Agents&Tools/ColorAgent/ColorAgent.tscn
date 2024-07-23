@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://tq1pb50sbrsc"]
+
+[ext_resource type="Script" path="res://Agents&Tools/ColorAgent/ColorAgent.gd" id="1_r1kis"]
+
+[node name="ColorAgent" type="Node"]
+script = ExtResource("1_r1kis")
+damage_color = Color(0.788235, 0.945098, 0, 1)
+player_color = Color(0, 0, 0.756863, 1)
+enemy_color = Color(0.745098, 0, 0, 1)
+heal_color = Color(0, 0.556863, 0, 1)

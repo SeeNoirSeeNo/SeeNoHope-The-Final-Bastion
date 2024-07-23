@@ -48,7 +48,7 @@ func end_turn() -> void:
 		if current_unit != null:
 			timeline.append(current_unit)
 #?#		print("All units done for the round. Starting new round.")
-		start_new_round()
+		end_of_turn() #Makes all units do their end of turn action
 	else:
 
 		if current_unit != null:
@@ -85,6 +85,11 @@ func all_units_done_for_round() -> bool:
 			return false
 	return true
 
+func end_of_turn():
+	for unit in timeline:
+		unit.end_of_turn_action()
+	start_new_round()
+	
 func start_new_round() -> void:
 	current_round += 1
 	print("\nStarting new round: ", current_round, "\n")
