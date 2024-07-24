@@ -92,11 +92,20 @@ func attack():
 		play_animation("Attack")
 		Audioplayer.play_sound(attack_sound)
 		pay_attack_cost()
-		deal_damage(target_enemy, roll_damage())
+		var damage = roll_damage()
+		print("damage: ", damage)
+		deal_damage(target_enemy, damage)
 		if life_leech > 0:
-			self_heal(life_leech, life_leech)
+			var life_leech_amount = calc_life_leech(damage)
+			print("life_leech_amount: ", life_leech_amount)
+			self_heal(life_leech_amount, life_leech_amount)
 		await animation_player.animation_finished
 		end_turn()
+
+func calc_life_leech(damage):
+	var life_leech_amount = (damage * life_leech) / 100
+	return life_leech_amount
+	
 
 
 func roll_damage() -> int:
@@ -354,6 +363,7 @@ func update_TU_bar(caller):
 ### ABILITIES ###
 func self_heal(min, max):
 	var heal_amount = randi_range(min, max)
+	print("Self Heal: ", heal_amount)
 	current_health_points += heal_amount
 	if current_health_points > health_points: #prevent over-healing
 		current_health_points = health_points
