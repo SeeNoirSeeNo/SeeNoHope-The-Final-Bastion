@@ -18,6 +18,7 @@ enum State {IDLE, MOVING, ATTACKING, HIT, DEAD, TURN_FINISHED, ROUND_FINISHED}
 @export var health_points : int
 @export var base_min_damage : int
 @export var base_max_damage : int
+@export var life_leech : int
 @export var move_cost : int
 @export var attack_cost : int
 @export var wait_cost : int
@@ -92,8 +93,11 @@ func attack():
 		Audioplayer.play_sound(attack_sound)
 		pay_attack_cost()
 		deal_damage(target_enemy, roll_damage())
+		if life_leech > 0:
+			self_heal(life_leech, life_leech)
 		await animation_player.animation_finished
 		end_turn()
+
 
 func roll_damage() -> int:
 	return randi_range(min_damage, max_damage)
