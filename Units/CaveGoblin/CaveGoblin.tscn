@@ -409,6 +409,7 @@ base_max_damage = 27
 move_cost = 18
 attack_cost = 28
 wait_cost = 5
+evasion_chance = 50
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2pi0q")
