@@ -23,6 +23,7 @@ enum State {IDLE, MOVING, ATTACKING, HIT, DEAD, TURN_FINISHED, ROUND_FINISHED}
 @export var attack_cost : int
 @export var wait_cost : int
 @export var attack_range : int = 1
+@export var evasion_chance : int = 0
 ### @ONREADY ###
 @onready var map = $"../../../Map".get_child(0)
 @onready var navigation_grid : NavigationGrid = $"../../../Agents/NavigationGrid"
@@ -94,6 +95,8 @@ func attack():
 		pay_attack_cost()
 		var damage = roll_damage()
 		print("damage: ", damage)
+		#if target_enemy.evasion_chance > 0:
+			#target_enemy.roll_evade()
 		deal_damage(target_enemy, damage)
 		if life_leech > 0:
 			var life_leech_amount = calc_life_leech(damage)
@@ -101,7 +104,12 @@ func attack():
 			self_heal(life_leech_amount, life_leech_amount)
 		await animation_player.animation_finished
 		end_turn()
-
+		
+#func roll_evade():
+	#var random_number = randi() % 100
+	#print("evade random_number: ", random_number)
+	#return evasion_chance < random_number
+	
 func calc_life_leech(damage):
 	var life_leech_amount = (damage * life_leech) / 100
 	return life_leech_amount
