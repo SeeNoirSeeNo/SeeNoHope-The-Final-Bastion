@@ -511,3 +511,5 @@ offset_bottom = 7.0
 [node name="TimeunitsBar" parent="." instance=ExtResource("12_by6x4")]
 offset_top = -22.0
 offset_bottom = 10.0
+
+[node name="Skills" type="Node" parent="."]

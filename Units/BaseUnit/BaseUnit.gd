@@ -18,11 +18,14 @@ enum State {IDLE, MOVING, ATTACKING, HIT, DEAD, TURN_FINISHED, ROUND_FINISHED}
 @export var health_points : int
 @export var base_min_damage : int
 @export var base_max_damage : int
-@export var life_leech : int
+@export var lifeleech_multiplier : float
+@export var lifeleech_chance : int
 @export var move_cost : int
 @export var attack_cost : int
 @export var wait_cost : int
 @export var attack_range : int = 1
+@export var crit_chance : int = 0
+@export var crit_multiplier : float = 0
 @export var evasion_chance : int = 0
 ### @ONREADY ###
 @onready var map = $"../../../Map".get_child(0)
@@ -32,6 +35,7 @@ enum State {IDLE, MOVING, ATTACKING, HIT, DEAD, TURN_FINISHED, ROUND_FINISHED}
 @onready var sprite = $Sprite2D
 @onready var healthbar : TextureProgressBar = $Healthbar
 @onready var TU_bar : TextureProgressBar = $TimeunitsBar
+@onready var skills = $Skills
 
 
 
@@ -45,18 +49,23 @@ var state = State.IDLE
 var is_dead = false
 var current_timeunits : int
 var is_done_for_the_round : bool = false
-var min_damage
-var max_damage
+var min_damage : int
+var max_damage : int
 var label_velocity: Vector2 = Vector2(8,-20)
 var label_duration: float = 0.8
 var current_health_points : int
 var group : String
 var is_active : bool = false
 
+### FLAGS ###
+var crit_flag = false
+
 ### FUNCTIONS ###
 func _ready():
 	await get_tree().process_frame #HACK: Wait so everything is init correctly and does not crash...
 	initiliaze_variables()
+
+
 
 func _process(delta):
 	if state == State.MOVING:
@@ -78,11 +87,14 @@ func _process(delta):
 			healthbar.hide()
 			TU_bar.hide()
 			queue_redraw()
-
-
+### SKILLS ###
+func use_skill(skillname: String):
+	for skill in skills.get_children():
+		if skill.has_method(skillname):
+			skill.callv(skillname, [self, target,])
 
 func attack():
-	print("I am ", self, " at cell ", current_cell, " and I choose to attack!")
+#	print("I am ", self, " at cell ", current_cell, " and I choose to attack!")
 	var adjacent_enemies : Array = navigation_grid.get_adjacent_units(self, group)
 	var alive_enemies = adjacent_enemies.filter(func(enemy): return !enemy.is_dead)
 	if alive_enemies.is_empty():
@@ -93,26 +105,32 @@ func attack():
 		play_animation("Attack")
 		Audioplayer.play_sound(attack_sound)
 		pay_attack_cost()
+		
 		var damage = roll_damage()
+
+		for skill in skills.get_children():
+			damage = skill.modify_damage(self, target_enemy, damage)
+		
 		print("damage: ", damage)
-		#if target_enemy.evasion_chance > 0:
-			#target_enemy.roll_evade()
-		deal_damage(target_enemy, damage)
-		if life_leech > 0:
-			var life_leech_amount = calc_life_leech(damage)
-			print("life_leech_amount: ", life_leech_amount)
-			self_heal(life_leech_amount, life_leech_amount)
+		deal_damage(self, target_enemy, damage)
+		lifeleech(self, target_enemy, damage, lifeleech_chance, lifeleech_multiplier)
 		await animation_player.animation_finished
+		reset_flags()
 		end_turn()
 		
+func lifeleech(attacker, target_enemy, damage, lifeleech_chance, lifeleech_multiplier):
+	for skill in skills.get_children():
+		if skill.has_method("lifeleech"):
+			skill.lifeleech(self, target_enemy, damage, lifeleech_chance, lifeleech_multiplier)
+
+func reset_flags():
+	crit_flag = false
 #func roll_evade():
 	#var random_number = randi() % 100
 	#print("evade random_number: ", random_number)
 	#return evasion_chance < random_number
 	
-func calc_life_leech(damage):
-	var life_leech_amount = (damage * life_leech) / 100
-	return life_leech_amount
+
 	
 
 
@@ -187,13 +205,20 @@ func end_of_turn_action():
 	pass
 
 
-	
-func deal_damage(target, dmg):
-	if target.has_method("take_damage"):
-		target.take_damage(dmg)
 
-func take_damage(damage):
-	healthbar.create_floating_label(damage, ColorAgent.damage_color, label_velocity, label_duration) #last 2 param make me unhappy
+func deal_damage(attacker, target, dmg):
+	if target.has_method("take_damage"):
+		target.take_damage(attacker, dmg)
+
+func take_damage(attacker, damage):
+	if attacker.crit_flag:
+		print("OTHER LABEL?!")
+		healthbar.create_floating_label("Crit!", ColorAgent.crit_text_color, label_velocity + Vector2(-5,-10), label_duration)
+		await get_tree().create_timer(0.1).timeout
+		healthbar.create_floating_label(damage, ColorAgent.crit_color, label_velocity, label_duration)
+		
+	else:
+		healthbar.create_floating_label(damage, ColorAgent.damage_color, label_velocity, label_duration) #last 2 param make me unhappy
 	current_health_points -= damage
 	if current_health_points <= 0:
 		current_health_points = 0
@@ -297,13 +322,15 @@ func initiliaze_variables():
 	adjacent_cells = navigation_grid.get_adjacent_cells(current_cell) #Makes only sense for meele
 	current_health_points = health_points
 	current_timeunits = timeunits
+	min_damage = base_min_damage
+	max_damage = base_max_damage
+	calc_and_set_wait_cost()
 	update_healthbar(self)
 	update_TU_bar(self)
 	queue_redraw()
-	#Set Damage
-	min_damage = base_min_damage
-	max_damage = base_max_damage
+
 	#Populate Actions Dict and make sure wait has the correct cost
+func calc_and_set_wait_cost():
 	actions = {
 		"move": move_cost,
 		"attack": attack_cost,
@@ -314,7 +341,6 @@ func initiliaze_variables():
 			lowest_cost = cost
 	wait_cost = lowest_cost - 1 #Substract 1 from it
 	actions["wait"] = wait_cost #New waiting cost
-	print(wait_cost)
 
 func pay_movement_cost_and_update_path() -> Array[Vector2i]:
 	if active_path.size() <= 1:

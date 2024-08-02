@@ -362,7 +362,6 @@ hit_sound = ExtResource("5_2lfpl")
 health_points = 66
 base_min_damage = 10
 base_max_damage = 20
-life_leech = 15
 move_cost = 15
 attack_cost = 25
 wait_cost = 5
@@ -391,3 +390,5 @@ offset_bottom = 14.0
 [node name="TimeunitsBar" parent="." instance=ExtResource("10_vded4")]
 offset_top = -15.0
 offset_bottom = 17.0
+
+[node name="Skills" type="Node" parent="."]
