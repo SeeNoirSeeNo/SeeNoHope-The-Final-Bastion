@@ -404,11 +404,13 @@ attack_sound = ExtResource("2_ovvph")
 death_sound = ExtResource("2_fh3to")
 hit_sound = ExtResource("5_e4aa6")
 health_points = 150
-base_min_damage = 22
-base_max_damage = 27
+base_min_damage = 2
+base_max_damage = 4
 move_cost = 18
 attack_cost = 28
 wait_cost = 5
+crit_chance = 20
+crit_multiplier = 2.0
 evasion_chance = 50
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -434,3 +436,5 @@ offset_bottom = 7.0
 [node name="TimeunitsBar" parent="." instance=ExtResource("12_30eps")]
 offset_top = -22.0
 offset_bottom = 10.0
+
+[node name="Skills" type="Node" parent="."]

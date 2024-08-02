@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccewqpigrx7s8"]
+
+[ext_resource type="Script" path="res://UnitSkills/CriticalStrike/CriticalStrike.gd" id="1_1bkd1"]
+
+[node name="CriticalStrike" type="Node"]
+script = ExtResource("1_1bkd1")

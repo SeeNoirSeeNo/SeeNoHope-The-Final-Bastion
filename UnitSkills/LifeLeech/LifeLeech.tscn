@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c08iu2f4r0ia7"]
+
+[ext_resource type="Script" path="res://UnitSkills/LifeLeech/LifeLeech.gd" id="1_g5ld7"]
+
+[node name="LifeLeech" type="Node"]
+script = ExtResource("1_g5ld7")

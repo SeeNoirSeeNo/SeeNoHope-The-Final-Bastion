@@ -32,3 +32,5 @@ offset_left = -11.9799
 offset_top = -67.886
 offset_right = 244.02
 offset_bottom = -35.886
+
+[node name="Skills" type="Node" parent="."]
