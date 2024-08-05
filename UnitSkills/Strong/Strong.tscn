@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dew8bljllec7j"]
+
+[ext_resource type="Script" path="res://UnitSkills/Strong/Strong.gd" id="1_e3dv3"]
+
+[node name="Strong" type="Node"]
+script = ExtResource("1_e3dv3")

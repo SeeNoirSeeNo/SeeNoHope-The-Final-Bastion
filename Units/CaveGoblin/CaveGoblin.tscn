@@ -2,13 +2,13 @@
 
 [ext_resource type="Script" path="res://Units/CaveGoblin/CaveGoblin.gd" id="1_t1e8x"]
 [ext_resource type="Texture2D" uid="uid://idak3dqujfmc" path="res://Units/FlyingEye/Flight.png" id="2_f6h4b"]
-[ext_resource type="AudioStream" uid="uid://dlicl25e77cbf" path="res://Units/CaveGoblin/GoblinScream.mp3" id="2_fh3to"]
-[ext_resource type="AudioStream" uid="uid://bl6n2204du0qs" path="res://Units/CaveGoblin/GoblinMove.wav" id="2_hfv0q"]
-[ext_resource type="AudioStream" uid="uid://cocfw8ctowh2r" path="res://Units/CaveGoblin/SwordSlash.ogg" id="2_ovvph"]
+[ext_resource type="AudioStream" uid="uid://bl6n2204du0qs" path="res://Units/CaveGoblin/GoblinMove.wav" id="2_h3lbu"]
+[ext_resource type="AudioStream" uid="uid://cocfw8ctowh2r" path="res://Units/CaveGoblin/SwordSlash.ogg" id="3_k1jgr"]
 [ext_resource type="Texture2D" uid="uid://dafvay8t63unw" path="res://Units/CaveGoblin/Attack.png" id="3_rox6u"]
+[ext_resource type="AudioStream" uid="uid://dlicl25e77cbf" path="res://Units/CaveGoblin/GoblinScream.mp3" id="4_0d0l1"]
 [ext_resource type="Texture2D" uid="uid://bqrkj7v5tabny" path="res://Units/CaveGoblin/Attack2.png" id="4_jnvv5"]
 [ext_resource type="Texture2D" uid="uid://10gbg05xmv0w" path="res://Units/CaveGoblin/Attack3.png" id="5_b3klg"]
-[ext_resource type="AudioStream" uid="uid://c4bacgg8dbvs8" path="res://Units/CaveGoblin/GoblinHit.wav" id="5_e4aa6"]
+[ext_resource type="AudioStream" uid="uid://c4bacgg8dbvs8" path="res://Units/CaveGoblin/GoblinHit.wav" id="5_qs2tx"]
 [ext_resource type="Texture2D" uid="uid://c03y1mjpx5kml" path="res://Units/CaveGoblin/Death.png" id="6_wfvu8"]
 [ext_resource type="Texture2D" uid="uid://c14wv4rx1ya1q" path="res://Units/CaveGoblin/Idle.png" id="7_bi2ti"]
 [ext_resource type="Texture2D" uid="uid://dt2p2qvyftddw" path="res://Units/CaveGoblin/Bomb_sprite.png" id="8_t8p56"]
@@ -396,22 +396,21 @@ _data = {
 
 [node name="CaveGoblin" type="CharacterBody2D"]
 script = ExtResource("1_t1e8x")
-unit_type = "Cave Goblin"
-speed = 300
-timeunits = 125
-move_sound = ExtResource("2_hfv0q")
-attack_sound = ExtResource("2_ovvph")
-death_sound = ExtResource("2_fh3to")
-hit_sound = ExtResource("5_e4aa6")
-health_points = 150
-base_min_damage = 2
-base_max_damage = 4
-move_cost = 18
-attack_cost = 28
+unit_type = "CaveGoblin"
+speed = 160
+timeunits = 110
+move_sound = ExtResource("2_h3lbu")
+attack_sound = ExtResource("3_k1jgr")
+death_sound = ExtResource("4_0d0l1")
+hit_sound = ExtResource("5_qs2tx")
+health_points = 110
+base_min_damage = 10
+base_max_damage = 20
+move_cost = 15
+attack_cost = 15
 wait_cost = 5
-crit_chance = 20
-crit_multiplier = 2.0
-evasion_chance = 50
+crit_chance = 35
+crit_multiplier = 50.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2pi0q")

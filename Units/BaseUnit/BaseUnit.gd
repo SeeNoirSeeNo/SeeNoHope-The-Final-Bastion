@@ -40,7 +40,6 @@ enum State {IDLE, MOVING, ATTACKING, HIT, DEAD, TURN_FINISHED, ROUND_FINISHED}
 
 
 ### VARIABLES ###
-
 var actions : Dictionary
 var active_path: Array[Vector2i]
 var current_cell : Vector2i
@@ -57,12 +56,16 @@ var current_health_points : int
 var group : String
 var is_active : bool = false
 
-### FLAGS ###
+### SKILL-FLAGS ###
+var has_crit = false
 var crit_flag = false
+var has_lifeleech = false
+var lifeleech_flag = false
+
 
 ### FUNCTIONS ###
 func _ready():
-	await get_tree().process_frame #HACK: Wait so everything is init correctly and does not crash...
+	await get_tree().process_frame #HACK:Wait so everything is init correctly and does not crash...
 	initiliaze_variables()
 
 
@@ -87,37 +90,50 @@ func _process(delta):
 			healthbar.hide()
 			TU_bar.hide()
 			queue_redraw()
-### SKILLS ###
-func use_skill(skillname: String):
-	for skill in skills.get_children():
-		if skill.has_method(skillname):
-			skill.callv(skillname, [self, target,])
 
-func attack():
-#	print("I am ", self, " at cell ", current_cell, " and I choose to attack!")
+func choose_target():
 	var adjacent_enemies : Array = navigation_grid.get_adjacent_units(self, group)
 	var alive_enemies = adjacent_enemies.filter(func(enemy): return !enemy.is_dead)
 	if alive_enemies.is_empty():
-		emit_signal("turn_finished")
-	else:
-		var target_enemy : Unit = alive_enemies.pick_random()
-		flip_sprite_combat(current_cell, target_enemy.current_cell)
-		play_animation("Attack")
-		Audioplayer.play_sound(attack_sound)
-		pay_attack_cost()
-		
-		var damage = roll_damage()
-
-		for skill in skills.get_children():
-			damage = skill.modify_damage(self, target_enemy, damage)
-		
-		print("damage: ", damage)
-		deal_damage(self, target_enemy, damage)
-		lifeleech(self, target_enemy, damage, lifeleech_chance, lifeleech_multiplier)
-		await animation_player.animation_finished
-		reset_flags()
 		end_turn()
-		
+	else:
+		return alive_enemies.pick_random()
+
+func crit(caller):
+	var damage : int
+	if randf() * 100 <= caller.crit_chance:
+		var min_crit = caller.base_min_damage * caller.crit_multiplier
+		var max_crit = caller.base_max_damage * caller.crit_multiplier
+		damage = randi_range(min_crit, max_crit)
+		caller.crit_flag = true
+		print(caller.crit_flag)
+		return damage
+	else:
+		return damage
+
+func attack():
+	var damage : int
+#	print("I am ", self, " at cell ", current_cell, " and I choose to attack!")
+	var target_enemy = choose_target()
+	flip_sprite_combat(current_cell, target_enemy.current_cell)
+	play_animation("Attack")
+	Audioplayer.play_sound(attack_sound)
+	pay_attack_cost()
+
+	damage = crit(self) if has_crit else roll_damage()
+
+	deal_damage(self, target_enemy, damage)
+	lifeleech(self, target_enemy, damage, lifeleech_chance, lifeleech_multiplier)
+	await animation_player.animation_finished
+	reset_flags()
+	end_turn()
+
+func use_skills(method_name):
+	for skill in skills.get_children():
+		if skill.has_method(method_name):
+			skill.call(method_name)
+
+
 func lifeleech(attacker, target_enemy, damage, lifeleech_chance, lifeleech_multiplier):
 	for skill in skills.get_children():
 		if skill.has_method("lifeleech"):
@@ -125,14 +141,6 @@ func lifeleech(attacker, target_enemy, damage, lifeleech_chance, lifeleech_multi
 
 func reset_flags():
 	crit_flag = false
-#func roll_evade():
-	#var random_number = randi() % 100
-	#print("evade random_number: ", random_number)
-	#return evasion_chance < random_number
-	
-
-	
-
 
 func roll_damage() -> int:
 	return randi_range(min_damage, max_damage)
