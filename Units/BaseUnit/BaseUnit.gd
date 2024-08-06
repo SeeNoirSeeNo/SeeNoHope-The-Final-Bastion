@@ -27,6 +27,9 @@ enum State {IDLE, MOVING, ATTACKING, HIT, DEAD, TURN_FINISHED, ROUND_FINISHED}
 @export var crit_chance : int = 0
 @export var crit_multiplier : float = 0
 @export var evasion_chance : int = 0
+@export var self_heal_min : int = 0
+@export var self_heal_max : int = 0
+@export var miss_chance : int = 0
 ### @ONREADY ###
 @onready var map = $"../../../Map".get_child(0)
 @onready var navigation_grid : NavigationGrid = $"../../../Agents/NavigationGrid"
@@ -51,16 +54,21 @@ var is_done_for_the_round : bool = false
 var min_damage : int
 var max_damage : int
 var label_velocity: Vector2 = Vector2(8,-20)
-var label_duration: float = 0.8
+var label_duration: float = 1.3
 var current_health_points : int
 var group : String
 var is_active : bool = false
+
 
 ### SKILL-FLAGS ###
 var has_crit = false
 var crit_flag = false
 var has_lifeleech = false
 var lifeleech_flag = false
+var has_miss = false
+var miss_flag = false
+var has_regen = false
+var regen_flag = false
 
 
 ### FUNCTIONS ###
@@ -99,51 +107,67 @@ func choose_target():
 	else:
 		return alive_enemies.pick_random()
 
-func crit(caller):
-	var damage : int
-	if randf() * 100 <= caller.crit_chance:
-		var min_crit = caller.base_min_damage * caller.crit_multiplier
-		var max_crit = caller.base_max_damage * caller.crit_multiplier
-		damage = randi_range(min_crit, max_crit)
-		caller.crit_flag = true
-		print(caller.crit_flag)
-		return damage
+func crit(damage):
+	if has_crit:
+		if randf() * 100 <= crit_chance:
+			var min_crit = base_min_damage * (crit_multiplier / 100)
+			var max_crit = base_max_damage * (crit_multiplier / 100)
+			damage = randi_range(min_crit, max_crit)
+			crit_flag = true
+			return damage
+		else:
+			return damage
 	else:
 		return damage
 
+func miss():
+	if has_miss:
+		if randf() * 100 <= miss_chance:
+			healthbar.create_floating_label("Miss!", ColorAgent.crit_text_color, label_velocity + Vector2(-5,-10), label_duration)
+			end_turn()
+
 func attack():
 	var damage : int
+	miss()
 #	print("I am ", self, " at cell ", current_cell, " and I choose to attack!")
-	var target_enemy = choose_target()
+	var target_enemy = choose_target() #Choose Alive Target
 	flip_sprite_combat(current_cell, target_enemy.current_cell)
 	play_animation("Attack")
 	Audioplayer.play_sound(attack_sound)
+
 	pay_attack_cost()
 
-	damage = crit(self) if has_crit else roll_damage()
+	damage = roll_damage() #roll base damage
+	damage = crit(damage) #roll crit and adjust damage
 
 	deal_damage(self, target_enemy, damage)
-	lifeleech(self, target_enemy, damage, lifeleech_chance, lifeleech_multiplier)
+
+	lifeleech(damage)
+
 	await animation_player.animation_finished
 	reset_flags()
 	end_turn()
 
-func use_skills(method_name):
-	for skill in skills.get_children():
-		if skill.has_method(method_name):
-			skill.call(method_name)
-
-
-func lifeleech(attacker, target_enemy, damage, lifeleech_chance, lifeleech_multiplier):
-	for skill in skills.get_children():
-		if skill.has_method("lifeleech"):
-			skill.lifeleech(self, target_enemy, damage, lifeleech_chance, lifeleech_multiplier)
+func lifeleech(damage):
+	if has_lifeleech:
+		if randf() * 100 <= lifeleech_chance:
+			var heal_amount = damage * (lifeleech_multiplier)
+			healthbar.create_floating_label("Leech!", ColorAgent.crit_text_color, label_velocity + Vector2(-5,-10), label_duration)
+			lifeleech_flag = true
+			self_heal(heal_amount, heal_amount)
+		else:
+			pass
+	else:
+		pass
+		
 
 func reset_flags():
 	crit_flag = false
+	lifeleech_flag = false
 
 func roll_damage() -> int:
-	return randi_range(min_damage, max_damage)
+	var damage = randi_range(min_damage, max_damage)
+	return damage
 	
 func pay_wait_cost():
 	current_timeunits -= actions["wait"]
@@ -401,6 +425,10 @@ func update_TU_bar(caller):
 	TU_bar.update(caller)
 
 
+func regen():
+	if current_health_points < health_points:
+		healthbar.create_floating_label("Regen!", ColorAgent.status_text_color, label_velocity + Vector2(-5,-10), label_duration + 1)
+		self_heal(self_heal_min, self_heal_max)
 
 ### ABILITIES ###
 func self_heal(min, max):

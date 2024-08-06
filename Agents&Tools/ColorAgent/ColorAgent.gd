@@ -8,3 +8,4 @@ extends Node
 @export var heal_color : Color
 
 @export var crit_text_color : Color
+@export var status_text_color : Color
