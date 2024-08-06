@@ -12,8 +12,8 @@ func _ready():
 	super()
 	var critical_strike = critical_strike_scene.instantiate()
 	skills.add_child(critical_strike)
-	print("CRIT ADDEDED", self)
-	
+	critical_strike.apply_skill(self)
+
 func end_of_turn_action():
 	self_heal(self_heal_min, self_heal_max)
 	var test = true

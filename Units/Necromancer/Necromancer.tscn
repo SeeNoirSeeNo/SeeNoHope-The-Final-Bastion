@@ -1,11 +1,11 @@
 [gd_scene load_steps=22 format=3 uid="uid://cxhygdbp6bdao"]
 
 [ext_resource type="Script" path="res://Units/Necromancer/Necromancer.gd" id="1_ugu43"]
-[ext_resource type="AudioStream" uid="uid://rsa0kju6ruty" path="res://Units/Necromancer/Necro-Run.mp3" id="2_w63wi"]
+[ext_resource type="AudioStream" uid="uid://rsa0kju6ruty" path="res://Units/Necromancer/Necro-Run.mp3" id="2_ai5em"]
+[ext_resource type="AudioStream" uid="uid://btuu2tc04tjr7" path="res://Units/Necromancer/Necro-Attack.mp3" id="3_6k61m"]
 [ext_resource type="Texture2D" uid="uid://dhiox0xovbmrm" path="res://Units/Necromancer/Necromancer_creativekind-Sheet.png" id="3_43voa"]
-[ext_resource type="AudioStream" uid="uid://btuu2tc04tjr7" path="res://Units/Necromancer/Necro-Attack.mp3" id="3_ykpxq"]
-[ext_resource type="AudioStream" uid="uid://cxqj2121rnehe" path="res://Units/Necromancer/Necro-Death.wav" id="4_8orpv"]
-[ext_resource type="AudioStream" uid="uid://bq62c8nxidic3" path="res://Units/Necromancer/Necro-Hit.mp3" id="4_d56of"]
+[ext_resource type="AudioStream" uid="uid://cxqj2121rnehe" path="res://Units/Necromancer/Necro-Death.wav" id="4_ufkbe"]
+[ext_resource type="AudioStream" uid="uid://bq62c8nxidic3" path="res://Units/Necromancer/Necro-Hit.mp3" id="5_5flbc"]
 [ext_resource type="Texture2D" uid="uid://idak3dqujfmc" path="res://Units/FlyingEye/Flight.png" id="6_iy305"]
 [ext_resource type="Texture2D" uid="uid://dt2p2qvyftddw" path="res://Units/CaveGoblin/Bomb_sprite.png" id="10_m6iv2"]
 [ext_resource type="PackedScene" uid="uid://cxnfg7i60h8eq" path="res://Graphics & UI/Healthbar/healthbar.tscn" id="11_033wq"]
@@ -474,17 +474,18 @@ _data = {
 
 [node name="Necromancer" type="CharacterBody2D"]
 script = ExtResource("1_ugu43")
+unit_type = "Necromancer"
 speed = 150
-timeunits = 200
-move_sound = ExtResource("2_w63wi")
-attack_sound = ExtResource("3_ykpxq")
-death_sound = ExtResource("4_8orpv")
-hit_sound = ExtResource("4_d56of")
-health_points = 70
+timeunits = 100
+move_sound = ExtResource("2_ai5em")
+attack_sound = ExtResource("3_6k61m")
+death_sound = ExtResource("4_ufkbe")
+hit_sound = ExtResource("5_5flbc")
+health_points = 100
 base_min_damage = 25
-base_max_damage = 44
-move_cost = 10
-attack_cost = 61
+base_max_damage = 35
+move_cost = 11
+attack_cost = 19
 wait_cost = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
