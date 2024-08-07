@@ -11,6 +11,7 @@ extends Node
 @onready var timeline_bar = $Battle_UI/Control/HBoxContainer/TimeLineBar
 @onready var prediction_bar = $Battle_UI/Control/HBoxContainer/PredictionBar
 @onready var battle_ui = $Battle_UI
+@onready var gamespeed_slider = $Battle_UI/GamespeedSlider
 
 
 
@@ -23,12 +24,13 @@ func _ready():
 	map_picker.load_map() #Load a map (at random)
 
 	unit_factory.create_unit("CaveGoblin", Vector2i(17,3), "Player", "Player", true)
-	unit_factory.create_unit("CaveGoblin", Vector2i(18,5), "Player", "Player", true)
-	unit_factory.create_unit("CaveGoblin", Vector2i(25,15), "Player", "Player", true)
-	unit_factory.create_unit("CaveGoblin", Vector2i(3,12), "Enemy", "Enemy", true)
+	unit_factory.create_unit("FlyingEye", Vector2i(18,5), "Player", "Player", true)
+	unit_factory.create_unit("Necromancer", Vector2i(25,15), "Player", "Player", true)
+	unit_factory.create_unit("BananaMan", Vector2i(28,12), "Player", "Player", true)
+	unit_factory.create_unit("BananaMan", Vector2i(4,16), "Enemy", "Enemy", true)
 	unit_factory.create_unit("CaveGoblin", Vector2i(4,18), "Enemy", "Enemy", true)
-	unit_factory.create_unit("CaveGoblin", Vector2i(5,18), "Enemy", "Enemy", true)
-	unit_factory.create_unit("CaveGoblin", Vector2i(6,18), "Enemy", "Enemy", true)
+	unit_factory.create_unit("Necromancer", Vector2i(5,18), "Enemy", "Enemy", true)
+	unit_factory.create_unit("FlyingEye", Vector2i(6,18), "Enemy", "Enemy", true)
 	
 	Audioplayer.play_music(music)
 	
@@ -49,3 +51,13 @@ func _on_unit_created(unit):
 	unit.turn_finished.connect(timeline._on_turn_finished)
 	unit.unit_died.connect(timeline._on_unit_died)
 	unit.unit_died.connect(navigation_grid._on_unit_died)
+
+
+func _on_gamespeed_button_button_down():
+	print("speed2x")
+	Engine.time_scale += 2.0
+
+
+func _on_gamespeed_slider_value_changed(value):
+	Engine.time_scale = value
+	print(Engine.time_scale)

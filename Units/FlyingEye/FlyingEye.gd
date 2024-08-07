@@ -3,7 +3,9 @@ extends Unit
 var lifeleech_scene = preload("res://UnitSkills/LifeLeech/LifeLeech.tscn")
 
 func _init():
-	pass
+	has_crit = true
+	has_lifeleech = true
+	has_miss = true
 
 func _ready():
 	super()

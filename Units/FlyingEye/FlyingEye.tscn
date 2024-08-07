@@ -354,19 +354,20 @@ _data = {
 script = ExtResource("1_4nd0p")
 unit_type = "FlyingEye"
 speed = 175
-timeunits = 125
+timeunits = 135
 move_sound = ExtResource("2_rykcm")
 attack_sound = ExtResource("3_ft5qi")
 death_sound = ExtResource("4_lohq0")
 hit_sound = ExtResource("5_6iuag")
-health_points = 75
+health_points = 60
 base_min_damage = 8
-base_max_damage = 15
-lifeleech_multiplier = 15.0
+base_max_damage = 12
+lifeleech_multiplier = 0.66
 lifeleech_chance = 100
-move_cost = 8
-attack_cost = 12
+move_cost = 15
+attack_cost = 15
 wait_cost = 5
+miss_chance = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2pi0q")

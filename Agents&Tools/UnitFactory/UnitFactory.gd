@@ -7,6 +7,7 @@ signal unit_created(unit: Unit)
 ### @ONREADY ###
 @onready var navigation_grid : NavigationGrid = $"../NavigationGrid"
 @onready var map = $"../../Map"
+@onready var timeline = $"../Timeline"
 ### VARIABLES ###
 var possible_units = ["FlyingEye", "CaveGoblin", "BananaMan", "Necromancer"]
 var tile_map : TileMap
@@ -76,11 +77,12 @@ func _input(event):
 
 
 
+#RANDOM UNIT IN RANDOM TEAM
 func spawn_random_unit(round):
 	var type = possible_units[randi() % possible_units.size()] # Pick a random unit type
-	print("UnitFactory: type = ", type)
+#	print("UnitFactory: type = ", type)
 	var position = navigation_grid.free_cells.pick_random() # Pick a random free cell
-	print("UnitFactory: position = ", position)
+#	print("UnitFactory: position = ", position)
 	var parent
 	var group
 	if round % 2 == 0:
@@ -91,8 +93,29 @@ func spawn_random_unit(round):
 		group = "Player"
 	create_unit(type, position, parent, group, true)
 
+#RANDOM UNIT FOR WEAKER TEAM
+func spawn_unit_for_weaker_team(round):
+	var type = possible_units[randi() % possible_units.size()]
+	var position = navigation_grid.free_cells.pick_random()
+	var parent
+	var group
+	var stronger_team = timeline.compare_alive_units()
+	if stronger_team == "Player":
+		parent = "Enemy"
+		group = "Enemy"
+		create_unit(type, position, parent, group, true)
+	elif stronger_team == "Enemy":
+		parent = "Player"
+		group = "Player"
+		create_unit(type, position, parent, group, true)
+	else:
+		spawn_random_unit(round)
+
+#COMPARE UNITS AND SPAWN
 func _on_round_finished(round):
-	spawn_random_unit(round)
+	print("The Player has: ", timeline.count_alive_units("Player"), " units!")
+	print("The Enemy has: ", timeline.count_alive_units("Enemy"), " units!")
+	spawn_unit_for_weaker_team(round)
 	
 #func spawn_unit():
 #	var type = possible_units[randi() % possible_units.size()] # Choose a random unit type

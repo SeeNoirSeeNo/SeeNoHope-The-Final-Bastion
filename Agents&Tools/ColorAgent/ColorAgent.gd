@@ -9,3 +9,4 @@ extends Node
 
 @export var crit_text_color : Color
 @export var status_text_color : Color
+@export var miss_text_color : Color

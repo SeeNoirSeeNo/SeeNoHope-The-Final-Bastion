@@ -476,17 +476,19 @@ _data = {
 script = ExtResource("1_ugu43")
 unit_type = "Necromancer"
 speed = 150
-timeunits = 100
+timeunits = 60
 move_sound = ExtResource("2_ai5em")
 attack_sound = ExtResource("3_6k61m")
 death_sound = ExtResource("4_ufkbe")
 hit_sound = ExtResource("5_5flbc")
-health_points = 100
-base_min_damage = 25
-base_max_damage = 35
-move_cost = 11
-attack_cost = 19
+health_points = 200
+base_min_damage = 40
+base_max_damage = 60
+move_cost = 10
+attack_cost = 30
 wait_cost = 5
+self_heal_min = 60
+self_heal_max = 60
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2pi0q")

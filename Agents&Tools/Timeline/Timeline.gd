@@ -100,3 +100,22 @@ func start_new_round() -> void:
 		unit.is_done_for_the_round = false
 		unit.refill_timeunits()
 	start_turn()
+
+func count_alive_units(group_name: String) -> int:
+	var count = 0
+	for unit in get_tree().get_nodes_in_group(group_name):
+		if not unit.is_dead:
+			count += 1
+	return count
+
+func compare_alive_units() -> String:
+	var player_alive_count = count_alive_units("Player")
+	var enemy_alive_count = count_alive_units("Enemy")
+	
+	if player_alive_count > enemy_alive_count:
+		return "Player"
+	elif enemy_alive_count > player_alive_count:
+		return "Enemy"
+	else:
+		return "Both teams have the same number of alive units"
+

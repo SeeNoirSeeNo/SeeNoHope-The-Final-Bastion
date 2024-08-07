@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bir852iq3v7sq"]
+[gd_scene load_steps=11 format=3 uid="uid://bir852iq3v7sq"]
 
 [ext_resource type="Script" path="res://MainScenes/Battle.gd" id="1_wgiy2"]
 [ext_resource type="PackedScene" uid="uid://duelxmv41oxw4" path="res://Agents&Tools/MapPicker/MapPicker.tscn" id="2_efjwm"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://MainScenes/Camera2D.gd" id="6_msmka"]
 [ext_resource type="Script" path="res://Agents&Tools/Timeline/Timeline.gd" id="6_t15fm"]
 [ext_resource type="PackedScene" uid="uid://c3tc28a0qxxdy" path="res://Graphics & UI/Battle_UI/battle_ui.tscn" id="9_y0wmg"]
+[ext_resource type="PackedScene" uid="uid://cwvsodv8h8wy" path="res://Graphics & UI/GamespeedButton/gamespeed_button.tscn" id="10_lrl5f"]
 
 [node name="Battle" type="Node"]
 script = ExtResource("1_wgiy2")
@@ -42,3 +43,12 @@ position = Vector2(576, 325)
 script = ExtResource("6_msmka")
 
 [node name="Battle_UI" parent="." instance=ExtResource("9_y0wmg")]
+
+[node name="GamespeedSlider" parent="Battle_UI" instance=ExtResource("10_lrl5f")]
+offset_left = 9.0
+offset_top = 8.0
+offset_right = 306.0
+offset_bottom = 24.0
+value = 1.0
+
+[connection signal="value_changed" from="Battle_UI/GamespeedSlider" to="." method="_on_gamespeed_slider_value_changed"]

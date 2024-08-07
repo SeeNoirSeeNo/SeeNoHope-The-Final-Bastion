@@ -108,7 +108,7 @@ func choose_target():
 		return alive_enemies.pick_random()
 
 func crit(damage):
-	if has_crit:
+	if has_crit && damage > 0:
 		if randf() * 100 <= crit_chance:
 			var min_crit = base_min_damage * (crit_multiplier / 100)
 			var max_crit = base_max_damage * (crit_multiplier / 100)
@@ -123,33 +123,30 @@ func crit(damage):
 func miss():
 	if has_miss:
 		if randf() * 100 <= miss_chance:
-			healthbar.create_floating_label("Miss!", ColorAgent.crit_text_color, label_velocity + Vector2(-5,-10), label_duration)
-			end_turn()
+			healthbar.create_floating_label("Miss!", ColorAgent.miss_text_color, label_velocity + Vector2(-5,-10), label_duration)
+			miss_flag = true
 
 func attack():
 	var damage : int
-	miss()
 #	print("I am ", self, " at cell ", current_cell, " and I choose to attack!")
 	var target_enemy = choose_target() #Choose Alive Target
 	flip_sprite_combat(current_cell, target_enemy.current_cell)
 	play_animation("Attack")
 	Audioplayer.play_sound(attack_sound)
-
 	pay_attack_cost()
-
+	miss()
 	damage = roll_damage() #roll base damage
 	damage = crit(damage) #roll crit and adjust damage
-
+	if miss_flag:
+		damage = 0
 	deal_damage(self, target_enemy, damage)
-
-	lifeleech(damage)
-
 	await animation_player.animation_finished
+	lifeleech(damage)
 	reset_flags()
 	end_turn()
 
 func lifeleech(damage):
-	if has_lifeleech:
+	if has_lifeleech && damage > 0:
 		if randf() * 100 <= lifeleech_chance:
 			var heal_amount = damage * (lifeleech_multiplier)
 			healthbar.create_floating_label("Leech!", ColorAgent.crit_text_color, label_velocity + Vector2(-5,-10), label_duration)
@@ -164,6 +161,7 @@ func lifeleech(damage):
 func reset_flags():
 	crit_flag = false
 	lifeleech_flag = false
+	miss_flag = false
 
 func roll_damage() -> int:
 	var damage = randi_range(min_damage, max_damage)
