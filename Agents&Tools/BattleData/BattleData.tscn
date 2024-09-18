@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://baxlle20kbsi7"]
+
+[ext_resource type="Script" path="res://Agents&Tools/BattleData/BattleData.gd" id="1_udthj"]
+
+[node name="BattleData" type="Node"]
+script = ExtResource("1_udthj")

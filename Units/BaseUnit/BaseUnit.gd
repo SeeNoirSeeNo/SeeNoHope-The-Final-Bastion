@@ -75,6 +75,7 @@ var regen_flag = false
 func _ready():
 	await get_tree().process_frame #HACK:Wait so everything is init correctly and does not crash...
 	initiliaze_variables()
+	UnitList.register_unit(unit_type)
 
 
 

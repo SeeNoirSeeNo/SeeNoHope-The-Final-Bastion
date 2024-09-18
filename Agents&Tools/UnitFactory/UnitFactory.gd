@@ -9,10 +9,9 @@ signal unit_created(unit: Unit)
 @onready var map = $"../../Map"
 @onready var timeline = $"../Timeline"
 ### VARIABLES ###
-var possible_units = ["FlyingEye", "CaveGoblin", "BananaMan", "Necromancer"]
 var tile_map : TileMap
 var unit_group : Array[PackedScene]
-
+var possible_units : Array = UnitList.get_possible_units()
 ### FUNCTIONS ###
 
 

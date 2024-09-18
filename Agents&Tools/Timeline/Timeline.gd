@@ -118,4 +118,3 @@ func compare_alive_units() -> String:
 		return "Enemy"
 	else:
 		return "Both teams have the same number of alive units"
-
